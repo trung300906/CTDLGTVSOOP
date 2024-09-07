@@ -33,7 +33,6 @@ int main()
     cin >> nAge;
     cin.ignore(32767, '\n');
     cout << "Enter your name: ";
-    string strName;
     getline(cin, strName);
 
     cout << "Hello, " << strName << endl;
