@@ -20,6 +20,5 @@ int main()
             cout << "a[" << i << "][" << j << "] = " << arr[i][j] << endl;
         }
     }
-
     return 0;
 }
