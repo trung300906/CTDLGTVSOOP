@@ -13,6 +13,14 @@ int main()
     };
 
     // xuất giá trị các phần tử mảng
+    // nhập mảng 2 chiều
+    for (int i = 0; i < ROW; i++)
+    {
+        for (int j = 0; j < COL; j++)
+        {
+            arr[i][j] = rand();
+        }
+    }
     for (int i = 0; i < ROW; i++)
     {
         for (int j = 0; j < COL; j++)
