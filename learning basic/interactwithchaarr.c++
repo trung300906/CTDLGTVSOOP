@@ -32,5 +32,10 @@ int main()
     cout << "Source: " << szSource << endl;
     cout << "Dest: " << szDest << endl;
     //Chú ý: Khi sử dụng hàm này, chuỗi đích phải đủ lớn để chứa được chuỗi nguồn. Nếu không, vấn đề tràn mảng sẽ xảy ra.
+    //Để nối 1 chuỗi vào sau chuỗi khác, bạn có thể sử dụng hàm strcat().
+	// nối chuỗi
+	strcat(szDest, " "); // "Hello "
+	strcat(szDest, szSource); // "Hello Howkteam.com!"
+	cout << "Dest: " << szDest << endl;
     return 0;
 }
