@@ -29,6 +29,9 @@ int main(){
     cout << sizeof(ptr) << endl;
     cout << sizeof(n) << endl;
     int *p;
-    foo(p);
-    cout <<*p << endl;
+  /*   foo(p);
+    cout <<*p << endl; */
+    int *ptrnull = NULL;
+    cout << ptrnull << endl;
+    return 0;
 }
