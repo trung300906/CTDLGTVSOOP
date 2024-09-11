@@ -14,4 +14,7 @@ int main(){
     for(int i = 0 ; i < 4; i++){
         cout <<  &a[i] << endl;
     }
+    for(int &i : a){
+        cout << &i << endl; // cannot be const right here becauze it's will replace all memory allocated for the first allocation
+    }
 }   
