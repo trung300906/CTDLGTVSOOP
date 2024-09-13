@@ -24,4 +24,16 @@ int main()
 
     int value2 = 6;
     ptr3 = &value2; // con trỏ hằng có thể trỏ đến địa chỉ khác
+
+    // const to pointer is pointer to memory allocated const, It's can pointer to another memory allocated, but cannot
+    // change the value of variable it's pointer to
+    //  const pointer
+    /* const pointer >< const to pointer, It's cannot change the memory allocated it's point to, but can directly change   the value of variable pointed */
+    // for ex:
+    int *const ptrr = &value1;
+    *ptrr = 70;     // it's valid as it's a pointer to memory allocated const
+    //ptrr = &value2; // error
+     //when you combine const to ointer with const pointer, you will have a pointer cannot change memory allocated and value of variable it's pointed to
+    const int *const ptrr_2 = &value;
+    system("pause");
 }
