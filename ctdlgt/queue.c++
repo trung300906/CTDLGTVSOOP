@@ -12,4 +12,6 @@ int main(){
     cout << q.empty() << endl;
     cout << "size: " << q.size() << endl;
     cout << "sizeof: " << sizeof(q) << endl;
+    if(q.empty()) cout << "Queue rong" << endl;
+    else cout << "Queue khong rong" << endl;
 }
