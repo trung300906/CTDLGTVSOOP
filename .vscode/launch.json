@@ -22,11 +22,11 @@
       "preLaunchTask": "build",
       "miDebuggerPath": "/usr/bin/gdb",
       "logging": {
-        "moduleLoad": false,
-        "trace": false,
-        "engineLogging": false,
+        "moduleLoad": true,
+        "trace": true,
+        "engineLogging": true,
         "programOutput": true,
-        "exceptions": false
+        "exceptions": true
       },
       "internalConsoleOptions": "openOnSessionStart"
     }

@@ -1,0 +1,19 @@
+{
+    "editor.fontSize": 14,
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "terminal.integrated.fontSize": 14,
+    "C_Cpp.intelliSenseEngine": "Default",
+    "C_Cpp.default.includePath": [
+      "${workspaceFolder}/**",
+      "/usr/include",
+      "/usr/local/include"
+    ],
+    "C_Cpp.default.compilerPath": "/usr/bin/g++",
+    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.cStandard": "c11"
+    
+  }
+  
