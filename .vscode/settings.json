@@ -5,7 +5,7 @@
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 1000,
     "terminal.integrated.fontSize": 14,
-    "C_Cpp.intelliSenseEngine": "Default",
+    "C_Cpp.intelliSenseEngine": "default",
     "C_Cpp.default.includePath": [
       "${workspaceFolder}/**",
       "/usr/include",
