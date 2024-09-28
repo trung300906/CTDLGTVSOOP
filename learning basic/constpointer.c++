@@ -35,5 +35,5 @@ int main()
     //ptrr = &value2; // error
      //when you combine const to ointer with const pointer, you will have a pointer cannot change memory allocated and value of variable it's pointed to
     const int *const ptrr_2 = &value;
-    system("pause");
+    //system("pause");
 }
