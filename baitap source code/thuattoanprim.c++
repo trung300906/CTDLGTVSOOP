@@ -1,26 +1,26 @@
-#include <bits/stdc++.h>
+vscode#include <bits/stdc++.h>
 using namespace std;
-bool duyet(vector<pair<vector<int>, bool>> v){
+bool duyet(vscodevector<pair<vector<int>, bool>> v){
     for(int i=0; i<v.size(); i++) if(v[i].second ==  false) return false;
     return true;
 }
-bool nope_zero(int a, int b){
-    if(a == 0) return false; // loại trừ số 0
+bool nope_zero(int a, int b){vscode
+    if(a == 0)vscode return false; // loại trừ số 0
     if(b == 0) return true;  // loại trừ số 0
     return a < b;
 } 
-// dijkstra
-int main(){
+// dijkstravscode
+int mainvscode
     srand(time(NULL));
     vector< pair< vector<int>, bool > >v = {
 /* positon  0 1 2 3 */
-/* way 0*/{{0,1,3,4},false},
+/* way 0*/{{0,1,3,4},favscodelse},vscode
 /* way 1*/{{1,0,2,0},false},
-/* way 2*/{{3,2,0,5},false},
-/* way 3*/{{4,0,5,0},false}
+/* way 2*/{{3,2,0,5vscode},false},vscode
+/* way 3*/{{4,0,5,0},false}vscode
     };
     vector<vector<int>> test(2);
-    vector<vector<int>> test_t(2);
+    vector<vector<int>> tesvscodet_t(2);
     for(int i=0 ; i < v.size(); i++){
         test[0].push_back(i);
         test[1].push_back(INT_MAX); // giả sử giá trị các đỉnh là vô cực
@@ -63,7 +63,7 @@ int main(){
         if(dem == 0) {cout << endl << "có giá trị lần lượt là: "; dem++;}
     }
 }
-#if 0 // kruskal
+#if 0 // kruskalvscode
         if(v[positon].second == false) cost += v[way].first[positon];
         v[way].second  =  true;
         v[way].first[positon] =  0;
@@ -85,8 +85,8 @@ int main(){
             positon = test[0][positon_temp];
         }
 #endif
-
-#if 0 // prim
+vscode
+#ifvscode 0 // primvscode
 // hàm cần dùng: 
 bool duyet(vector<pair<vector<int>, bool>> v){
     for(int i=0; i<v.size(); i++) if(v[i].second ==  false) return false;

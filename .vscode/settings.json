@@ -16,7 +16,9 @@
     "C_Cpp.default.cStandard": "c11",
     "files.associations": {
       "iostream": "cpp",
-      "ostream": "cpp"
+      "ostream": "cpp",
+      "chrono": "cpp",
+      "span": "cpp"
     }
     
   }
