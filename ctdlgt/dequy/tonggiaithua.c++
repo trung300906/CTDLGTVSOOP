@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 int giaithua(int n)
 {
     if (n == 0 || n == 1)
@@ -20,6 +19,6 @@ int main()
 {
     int n;
     cin >> n;
-    cout << tongn(n) << endl;
+    cout << tongn( n) << endl;
     return 0;
 }
