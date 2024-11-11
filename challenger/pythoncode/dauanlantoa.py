@@ -1,5 +1,5 @@
 import concurrent.futures
-import os
+#import os
 
 def compute_lps(pattern):
     m = len(pattern)
@@ -76,8 +76,8 @@ def MAIN(filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challe
         i += 2
 
     # Tự động phát hiện số lõi CPU
-    num_processes = os.cpu_count()  # Lấy số lượng lõi CPU hiện có
-    print(f"Using {num_processes} processes.")  # In ra số tiến trình sử dụng
+    num_processes = 8 # Lấy số lượng lõi CPU hiện có
+    #print(f"Using {num_processes} processes.")  # In ra số tiến trình sử dụng
 
     # Chia cặp chuỗi thành các nhóm nhỏ cho từng tiến trình
     chunk_size = len(pairs) // num_processes + 1
