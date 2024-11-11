@@ -31,7 +31,7 @@ def calculate_fibonacci(position):
 
 # Main code to calculate Fibonacci numbers in parallel
 if __name__ == "__main__":
-    positions = [10, 12, 12]  # Large Fibonacci positions to calculate
+    positions = [10, 12, 10**8]  # Large Fibonacci positions to calculate
 
     # Use ProcessPoolExecutor to parallelize the calculations
     with concurrent.futures.ProcessPoolExecutor() as executor:

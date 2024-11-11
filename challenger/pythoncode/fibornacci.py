@@ -1,45 +1,54 @@
 import concurrent.futures
 import sys
+import os
 
 sys.set_int_max_str_digits(100000000)
 
-# Function to calculate one Fibonacci step with large integers
-def fibonacci_step(a, b, steps):
-    for _ in range(steps):
-        a, b = b, str(int(a) + int(b))
-    return a, b
+# Fast doubling Fibonacci method
+def fibonacci_fast_doubling(n):
+    if n == 0:
+        return "0"
+    elif n == 1:
+        return "1"
 
-# Process each chunk independently to avoid pickling issues
-def process_chunk(task):
-    a, b, steps = task
-    final_a, _ = fibonacci_step(a, b, steps)
-    return final_a
+    def fib_doubling(k):
+        if k == 0:
+            return "0", "1"
+        else:
+            a, b = fib_doubling(k // 2)
+            c = str(int(a) * (2 * int(b) - int(a)))
+            d = str(int(a) * int(a) + int(b) * int(b))
+            if k % 2 == 0:
+                return c, d
+            else:
+                return d, str(int(c) + int(d))
 
-# Function to find large Fibonacci number using process-based parallelism
-def find_large_fibonacci_with_splitting(position, chunk_size=100000):
-    # Split the position into chunks for parallel processing
-    tasks = []
-    a, b = "0", "1"
-    remaining_steps = position
+    return fib_doubling(n)[0]
 
-    # Generate tasks for each chunk
-    while remaining_steps > 0:
-        steps = min(chunk_size, remaining_steps)
-        tasks.append((a, b, steps))
-        a, b = fibonacci_step(a, b, steps)  # Update state for the next chunk
-        remaining_steps -= steps
+# Tính một phần của Fibonacci
+def compute_partial_fib(pos):
+    return pos, fibonacci_fast_doubling(pos)
 
-    # Use ProcessPoolExecutor for parallel processing
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        # Submit each task and collect the results
-        results = list(executor.map(process_chunk, tasks))
+# Parallel computation for large Fibonacci numbers
+def parallel_fibonacci(position, num_workers):
+    # Divide the position into smaller tasks for each worker
+    segment_size = position // num_workers
+    positions = [segment_size * i for i in range(num_workers)]
+    positions.append(position)  # Add the final position for exact calculation
 
-    # The last result in the list will contain the final Fibonacci number at `position`
-    return results[-1]
+    # Use ProcessPoolExecutor to parallelize computation
+    with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
+        futures = [executor.submit(compute_partial_fib, pos) for pos in positions]
+        results = [future.result() for future in concurrent.futures.as_completed(futures)]
 
-# Call the main function with Fibonacci positions to calculate
+    # Combine the partial results (results are tuples with (position, fib_number))
+    fib_values = sorted(results, key=lambda x: x[0])
+    final_fib_value = fib_values[-1][1]  # The last position holds the Fibonacci for 'position'
+    return final_fib_value
+
 if __name__ == "__main__":
-    positions = [10, 12, 1000000]  # Fibonacci positions to calculate
-    for pos in positions:
-        fib_num = find_large_fibonacci_with_splitting(pos)
-        print(f"Fibonacci number at position {pos} is {fib_num}")
+    position = 10**8  # Very large Fibonacci position
+    num_workers = os.cpu_count()  # Automatically use all available cores
+    print(f"Calculating Fibonacci number at position {position} using {num_workers} cores...")
+    fib_result = parallel_fibonacci(position, num_workers)
+    print(f"Fibonacci number at position {position} is {fib_result}")

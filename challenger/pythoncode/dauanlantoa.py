@@ -76,16 +76,14 @@ def MAIN(filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challe
         i += 2
 
     # Tự động phát hiện số lõi CPU
-    num_processes = 8 # Lấy số lượng lõi CPU hiện có
+    num_processes = 8 #os.cpu_count()  # Lấy số lượng lõi CPU hiện có
     #print(f"Using {num_processes} processes.")  # In ra số tiến trình sử dụng
 
     # Chia cặp chuỗi thành các nhóm nhỏ cho từng tiến trình
     chunk_size = len(pairs) // num_processes + 1
     chunks = [pairs[i:i + chunk_size] for i in range(0, len(pairs), chunk_size)]
 
-    result = []
-
-    # Sử dụng ProcessPoolExecutor để xử lý song song, bypass GIL
+    result = [None] * len(pairs)
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_processes) as executor:
         futures = [executor.submit(process_pairs, chunk, idx) for idx, chunk in enumerate(chunks)]
         for future in concurrent.futures.as_completed(futures):
