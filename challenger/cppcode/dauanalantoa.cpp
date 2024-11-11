@@ -75,6 +75,9 @@ int KMPsearch(const string &text, const string &pattern)
 
 int main()
 {
+    // Redirect standard input to read from "input.txt"
+    freopen("input.txt", "r", stdin);
+
     vector<pair<string, string>> a;
     int n;
     cin >> n;
