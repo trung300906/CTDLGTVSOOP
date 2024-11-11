@@ -1,7 +1,3 @@
-# Some allowed libraries
-# import threading, multiprocessing, concurrent.futures, asyncio
-# import joblib, math, string, re, collections, queue
-
 def compute_lps(pattern):
     m = len(pattern)
     lps = [0] * m
@@ -45,7 +41,7 @@ def kmp_search(text, pattern):
                 i += 1
     return count
 
-def MAIN(input_filename="input.txt"):
+def MAIN(input_filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/input.txt"):
     with open(input_filename, "r") as file:
         data = file.readlines()
 
@@ -64,6 +60,9 @@ def MAIN(input_filename="input.txt"):
     for key, value in pairs:
         longer, shorter = key, value
 
+        # Giữ nguyên khoảng trắng giữa các từ
+        # Không loại bỏ khoảng trắng
+
         if len(shorter) > len(longer):
             longer, shorter = shorter, longer
 
@@ -74,9 +73,9 @@ def MAIN(input_filename="input.txt"):
         else:
             result.append(str(count))
 
-    return " ".join(result)
+    return "\n".join(result)
 
 # Example call to the MAIN function
 if __name__ == "__main__":
-    output = MAIN("input.txt")
+    output = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/input.txt")
     print(output)  # In kết quả ra màn hình console (nếu cần)
