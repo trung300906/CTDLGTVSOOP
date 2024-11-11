@@ -1,3 +1,5 @@
 2
-abababab ab
-bbbbbbb bbb
+aaaa
+aa
+bnbbbb
+aaaa

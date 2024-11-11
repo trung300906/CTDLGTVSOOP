@@ -48,9 +48,12 @@ def MAIN(input_filename="input.txt"):
     n = int(data[0].strip())
     pairs = []
 
-    for i in range(1, n + 1):
-        key, value = data[i].strip().split()
+    i = 1
+    while i < len(data):
+        key = data[i].strip()
+        value = data[i + 1].strip()
         pairs.append((key, value))
+        i+=2
 
     result = []
 
