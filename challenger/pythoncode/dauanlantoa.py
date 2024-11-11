@@ -1,3 +1,7 @@
+# Some allowed libraries
+# import threading, multiprocessing, concurrent.futures, asyncio
+# import joblib, math, string, re, collections, queue
+
 def compute_lps(pattern):
     m = len(pattern)
     lps = [0] * m
@@ -44,7 +48,7 @@ def kmp_search(text, pattern):
 def MAIN(input_filename="input.txt"):
     with open(input_filename, "r") as file:
         data = file.readlines()
-    
+
     n = int(data[0].strip())
     pairs = []
 
@@ -53,7 +57,7 @@ def MAIN(input_filename="input.txt"):
         key = data[i].strip()
         value = data[i + 1].strip()
         pairs.append((key, value))
-        i+=2
+        i += 2
 
     result = []
 
@@ -71,3 +75,8 @@ def MAIN(input_filename="input.txt"):
             result.append(str(count))
 
     return " ".join(result)
+
+# Example call to the MAIN function
+if __name__ == "__main__":
+    output = MAIN("input.txt")
+    print(output)  # In kết quả ra màn hình console (nếu cần)
