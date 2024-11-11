@@ -1,3 +1,5 @@
+import concurrent.futures
+
 def compute_lps(pattern):
     m = len(pattern)
     lps = [0] * m
@@ -41,8 +43,25 @@ def kmp_search(text, pattern):
                 i += 1
     return count
 
-def MAIN(input_filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/input.txt"):
-    with open(input_filename, "r") as file:
+def process_pairs(pairs):
+    result = []
+    for key, value in pairs:
+        longer, shorter = key, value
+
+        if len(shorter) > len(longer):
+            longer, shorter = shorter, longer
+
+        count = kmp_search(longer, shorter)
+
+        if count == 0:
+            result.append("-1")
+        else:
+            result.append(str(count))
+
+    return result
+
+def MAIN(filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/input.txt"):
+    with open(filename, "r") as file:
         data = file.readlines()
 
     n = int(data[0].strip())
@@ -55,27 +74,21 @@ def MAIN(input_filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/
         pairs.append((key, value))
         i += 2
 
+    # Chia cặp chuỗi thành các nhóm nhỏ cho từng luồng
+    num_threads = 8 # Số lượng luồng bạn muốn sử dụng
+    chunk_size = len(pairs) // num_threads + 1
+    chunks = [pairs[i:i + chunk_size] for i in range(0, len(pairs), chunk_size)]
+
     result = []
-
-    for key, value in pairs:
-        longer, shorter = key, value
-
-        # Giữ nguyên khoảng trắng giữa các từ
-        # Không loại bỏ khoảng trắng
-
-        if len(shorter) > len(longer):
-            longer, shorter = shorter, longer
-
-        count = kmp_search(longer, shorter)
-
-        if count == 0:
-            result.append("-1")
-        else:
-            result.append(str(count))
+    
+    # Sử dụng ThreadPoolExecutor để xử lý song song
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+        futures = [executor.submit(process_pairs, chunk) for chunk in chunks]
+        for future in concurrent.futures.as_completed(futures):
+            result.extend(future.result())  # Kết hợp kết quả từ các luồng
 
     return "\n".join(result)
 
-# Example call to the MAIN function
 if __name__ == "__main__":
     output = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/input.txt")
     print(output)  # In kết quả ra màn hình console (nếu cần)
