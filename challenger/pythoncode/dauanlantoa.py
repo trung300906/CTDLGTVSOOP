@@ -1,4 +1,5 @@
 import concurrent.futures
+import os
 
 def compute_lps(pattern):
     m = len(pattern)
@@ -43,7 +44,7 @@ def kmp_search(text, pattern):
                 i += 1
     return count
 
-def process_pairs(pairs):
+def process_pairs(pairs, index):
     result = []
     for key, value in pairs:
         longer, shorter = key, value
@@ -58,7 +59,7 @@ def process_pairs(pairs):
         else:
             result.append(str(count))
 
-    return result
+    return (index, result)
 
 def MAIN(filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/input.txt"):
     with open(filename, "r") as file:
@@ -74,18 +75,22 @@ def MAIN(filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challe
         pairs.append((key, value))
         i += 2
 
-    # Chia cặp chuỗi thành các nhóm nhỏ cho từng luồng
-    num_threads = 8 # Số lượng luồng bạn muốn sử dụng
-    chunk_size = len(pairs) // num_threads + 1
+    # Tự động phát hiện số lõi CPU
+    num_processes = os.cpu_count()  # Lấy số lượng lõi CPU hiện có
+    print(f"Using {num_processes} processes.")  # In ra số tiến trình sử dụng
+
+    # Chia cặp chuỗi thành các nhóm nhỏ cho từng tiến trình
+    chunk_size = len(pairs) // num_processes + 1
     chunks = [pairs[i:i + chunk_size] for i in range(0, len(pairs), chunk_size)]
 
     result = []
-    
-    # Sử dụng ThreadPoolExecutor để xử lý song song
-    with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
-        futures = [executor.submit(process_pairs, chunk) for chunk in chunks]
+
+    # Sử dụng ProcessPoolExecutor để xử lý song song, bypass GIL
+    with concurrent.futures.ProcessPoolExecutor(max_workers=num_processes) as executor:
+        futures = [executor.submit(process_pairs, chunk, idx) for idx, chunk in enumerate(chunks)]
         for future in concurrent.futures.as_completed(futures):
-            result.extend(future.result())  # Kết hợp kết quả từ các luồng
+            index, res = future.result()  # Lấy kết quả với chỉ số của tiến trình
+            result[index * chunk_size : (index + 1) * chunk_size] = res  # Đảm bảo kết quả đúng thứ tự
 
     return "\n".join(result)
 
