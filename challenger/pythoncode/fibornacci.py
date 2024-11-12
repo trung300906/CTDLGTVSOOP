@@ -44,12 +44,14 @@ def parallel_fibonacci(n, num_workers):
 def MAIN(input = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt"):
     with open(input, "r") as file:
         data = file.readlines()
-    n =  int(data[0].strip())
+    first_line = data[0].strip().split()
+    n =  int(first_line[0])
+    modul = int(first_line[1])
     positions = [int(line.strip()) for line in data[1:n+1]] 
     num_workers = 8
     result = []
     for i in positions:
-        fib_result = parallel_fibonacci(i, num_workers) % 100000000
+        fib_result = parallel_fibonacci(i, num_workers) % modul
         result.append(fib_result)
     
     return "\n".join(map(str, result))
