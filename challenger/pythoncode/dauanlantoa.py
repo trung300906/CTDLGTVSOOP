@@ -89,8 +89,9 @@ def MAIN(filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challe
         for future in concurrent.futures.as_completed(futures):
             index, res = future.result()  # Lấy kết quả với chỉ số của tiến trình
             result[index * chunk_size : (index + 1) * chunk_size] = res  # Đảm bảo kết quả đúng thứ tự
-
-    return "\n".join(result)
+    output = "\n".join(result)
+    #print(output)
+    return (output)
 
 if __name__ == "__main__":
     output = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/input.txt")
