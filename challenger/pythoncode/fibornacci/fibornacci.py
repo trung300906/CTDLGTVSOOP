@@ -1,6 +1,6 @@
 import concurrent.futures
 import sys
-
+import os
 sys.set_int_max_str_digits(100000000)
 
 # Fast doubling method to compute part of Fibonacci sequence
@@ -46,12 +46,11 @@ def MAIN(input = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challen
         data = file.readlines()
     first_line = data[0].strip().split()
     n =  int(first_line[0])
-    modul = int(first_line[1])
     positions = [int(line.strip()) for line in data[1:n+1]] 
-    num_workers = 8
+    num_workers = os.cpu_count()
     result = []
     for i in positions:
-        fib_result = parallel_fibonacci(i, num_workers) % modul
+        fib_result = parallel_fibonacci(i, num_workers)
         result.append(fib_result)
     
     return "\n".join(map(str, result))
