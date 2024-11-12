@@ -41,12 +41,11 @@ def parallel_fibonacci(n, num_workers):
     final_result = sum(results)
     return final_result
 
-def MAIN(input = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt"):
-    with open(input, "r") as file:
-        data = file.readlines()
-    first_line = data[0].strip().split()
-    n =  int(first_line[0])
-    positions = [int(line.strip()) for line in data[1:n+1]] 
+def MAIN(): # Read input from the keyboard 
+    n = int(input("Enter the number of positions: ")) 
+    positions = [] 
+    for _ in range(n): 
+        positions.append(int(input(f"Enter position {_+1}: ")))
     num_workers = os.cpu_count()
     result = []
     for i in positions:
@@ -55,5 +54,5 @@ def MAIN(input = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challen
     
     return "\n".join(map(str, result))
 if __name__ == "__main__":
-    output = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt")
+    output = MAIN()
     print(output)
