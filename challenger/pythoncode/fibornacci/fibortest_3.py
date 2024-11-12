@@ -24,7 +24,6 @@ def compute_partial_fib(n, start, end, modul):
     fib_start, fib_next = fibonacci_fast_doubling_bitwise(start, modul)
     fib_end, _ = fibonacci_fast_doubling_bitwise(end, modul)
     return (fib_end - fib_start) % modul
-
 # Chia công việc tính toán Fibonacci giữa các luồng
 def parallel_fibonacci(n, num_workers, modul):
     segment_size = n // num_workers
