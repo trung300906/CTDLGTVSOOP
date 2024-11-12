@@ -41,9 +41,18 @@ def parallel_fibonacci(n, num_workers):
     final_result = sum(results)
     return final_result
 
+def MAIN(input = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt"):
+    with open(input, "r") as file:
+        data = file.readlines()
+    n =  int(data[0].strip())
+    positions = [int(line.strip()) for line in data[1:n+1]] 
+    num_workers = 8
+    result = []
+    for i in positions:
+        fib_result = parallel_fibonacci(i, num_workers) % 100000000
+        result.append(fib_result)
+    
+    return "\n".join(map(str, result))
 if __name__ == "__main__":
-    position = 10**8  # Large Fibonacci position to calculate
-    num_workers = 8  # Using 8 cores
-    print(f"Calculating Fibonacci number at position {position} using {num_workers} cores...")
-    fib_result = parallel_fibonacci(position, num_workers)
-    print(f"Fibonacci number at position {position} is {fib_result}")
+    output = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt")
+    print(output)
