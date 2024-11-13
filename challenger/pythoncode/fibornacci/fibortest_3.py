@@ -1,7 +1,4 @@
 import concurrent.futures
-import sys
-
-sys.set_int_max_str_digits(100000000)
 
 # Cải tiến phương pháp Fast Doubling với toán tử bitwise
 # Tính Fibonacci theo dạng modulo
@@ -52,7 +49,7 @@ def MAIN(input_file = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/ch
         fib_result = parallel_fibonacci(pos, num_workers, modul)
         result.append(fib_result)
 
-    return "\n".join(map(str, result))
+    return result
 
 if __name__ == "__main__":
     output = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt")

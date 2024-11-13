@@ -1,8 +1,5 @@
-import numpy as np
 import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
-from functools import lru_cache
-import time
 
 # Hàm tính số Fibonacci sử dụng phương pháp fast doubling với chu kỳ Pisano
 def fibonacci_fast_doubling_bitwise(n, modul):
@@ -28,7 +25,6 @@ def find_fibonacci_position(positions, modul, pisano_period):
     return results
 
 # Sử dụng bộ nhớ đệm để tránh tính lại chu kỳ Pisano cho cùng một modul
-@lru_cache(maxsize=None)
 def get_pisano_period(modul):
     a, b = 0, 1
     for i in range(0, modul * modul):
@@ -62,13 +58,10 @@ def MAIN(inputfile = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/cha
     n = int(first_line[0])
     modul = int(first_line[1])
     positions = [int(line.strip()) for line in data[1:n+1]]
-    start_time = time.time()
     results = parallel_fibonacci_positions(positions, modul)
-    end_time = time.time()
-    print(f"Thời gian thực hiện: {end_time - start_time} giây")
     return results, modul
 
 if __name__ == "__main__":
     output, modul = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt")
     for pos, result in output:
-        print(f"F({pos}) % {modul} = {result}")
+        print(result)

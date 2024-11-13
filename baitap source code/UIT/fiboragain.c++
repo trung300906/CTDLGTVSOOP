@@ -1,37 +1,24 @@
 #include <iostream>
+#include <iomanip>
+#include <cmath>
 using namespace std;
 
-// Function to calculate the nth Fibonacci number
-int fibonacci(int n)
+double approximatePi(int n)
 {
-    if (n <= 1)
-        return n;
-    int a = 1, b = 1, c = 0;
-    for (int i = 3; i <= n; i++)
+    long double total = 0;
+    for (int i = 1; i <= n; i++)
     {
-        c = a + b;
-        a = b;
-        b = c;
+        total += pow((-1), i) / (2 * i + 1);
     }
-    return b;
+    return 4 * total;
 }
 
 int main()
 {
-    int x;
-    cin >> x;
-
-    // Check if x is in the valid range
-    if (x < 1 || x > 30)
-    {
-        cout << "So " << x << " khong nam trong khoang [1,30]." << endl;
-    }
-    else
-    {
-        // Calculate the xth Fibonacci number
-        int fib = fibonacci(x);
-        cout << fib;
-    }
+    double n;
+    cin >> n;
+    cout << fixed << setprecision(5);
+    cout << "" << approximatePi(n) << endl;
 
     return 0;
 }

@@ -1,6 +1,6 @@
 import concurrent.futures
 #import os
-
+import time
 def compute_lps(pattern):
     m = len(pattern)
     lps = [0] * m
@@ -74,15 +74,14 @@ def MAIN(filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challe
         value = data[i + 1].strip()
         pairs.append((key, value))
         i += 2
-
+    start = time.time()
     # Tự động phát hiện số lõi CPU
     num_processes = 8 #os.cpu_count()  # Lấy số lượng lõi CPU hiện có
     #print(f"Using {num_processes} processes.")  # In ra số tiến trình sử dụng
 
     # Chia cặp chuỗi thành các nhóm nhỏ cho từng tiến trình
-    chunk_size = len(pairs) // num_processes + 1
+    chunk_size = max(num_processes, len(pairs) // (num_processes * 100))
     chunks = [pairs[i:i + chunk_size] for i in range(0, len(pairs), chunk_size)]
-
     result = [None] * len(pairs)
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_processes) as executor:
         futures = [executor.submit(process_pairs, chunk, idx) for idx, chunk in enumerate(chunks)]
@@ -90,8 +89,9 @@ def MAIN(filename="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challe
             index, res = future.result()  # Lấy kết quả với chỉ số của tiến trình
             result[index * chunk_size : (index + 1) * chunk_size] = res  # Đảm bảo kết quả đúng thứ tự
     output = "\n".join(result)
-    #print(output)
-    return (output)
+    end = time.time()
+    
+    return (output),(end -start)
 
 if __name__ == "__main__":
     output = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/input.txt")
