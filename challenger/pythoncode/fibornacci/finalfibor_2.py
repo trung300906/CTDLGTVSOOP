@@ -1,8 +1,9 @@
 import numpy as np
 import multiprocessing
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from functools import lru_cache
 import time
+from collections import deque
 
 # Hàm tính số Fibonacci sử dụng phương pháp fast doubling với chu kỳ Pisano
 def fibonacci_fast_doubling_bitwise(n, modul):
@@ -20,12 +21,25 @@ def fibonacci_fast_doubling_bitwise(n, modul):
     return fib_doubling(n)[0]
 
 # Hàm để tìm các số Fibonacci tại các vị trí cụ thể
-def find_fibonacci_position(positions, modul, pisano_period):
-    results = []
-    for pos in positions:
+def find_fibonacci_position(my_queue, other_queues, result_list, modul, pisano_period, lock):
+    while True:
+        pos = None
+        with lock:
+            if not my_queue.empty():
+                pos = my_queue.get()
+            else:
+                # Steal work from another queue
+                for q in other_queues:
+                    if not q.empty():
+                        pos = q.get()
+                        break
+
+        if pos is None:
+            break
+
         pos_mod_pisano = pos % pisano_period
-        results.append((pos, fibonacci_fast_doubling_bitwise(pos_mod_pisano, modul)))
-    return results
+        result = (pos, fibonacci_fast_doubling_bitwise(pos_mod_pisano, modul))
+        result_list.append(result)
 
 # Sử dụng bộ nhớ đệm để tránh tính lại chu kỳ Pisano cho cùng một modul
 @lru_cache(maxsize=None)
@@ -39,29 +53,36 @@ def get_pisano_period(modul):
 
 # Hàm chính để xử lý song song các vị trí sử dụng ProcessPoolExecutor
 def parallel_fibonacci_positions(positions, modul):
-    pisano_period = get_pisano_period(modul)  # Tính chu kỳ Pisano một lần duy nhất
-    num_workers = multiprocessing.cpu_count() # Tăng gấp đôi số luồng xử lý
-    # Tạo các chunk động để phân phối công việc tốt hơn
-    chunk_size = max(num_workers, len(positions) // (num_workers * 100))  # Chia nhỏ các chunk hơn nữa
-    chunks = [positions[i:i + chunk_size] for i in range(0, len(positions), chunk_size)]
-    results = []
+    pisano_period = get_pisano_period(modul)
+    num_workers = multiprocessing.cpu_count()
 
-    with ProcessPoolExecutor(max_workers=num_workers) as process_executor:
-        futures = [process_executor.submit(find_fibonacci_position, chunk, modul, pisano_period) for chunk in chunks]
-        for future in futures:
-            results.extend(future.result())
-            
-    # Sắp xếp lại kết quả theo thứ tự ban đầu
+    manager = multiprocessing.Manager()
+    queues = [manager.Queue() for _ in range(num_workers)]
+    result_list = manager.list()
+    lock = manager.Lock()
+
+    # Phân phối công việc vào các hàng đợi
+    for i, pos in enumerate(positions):
+        queues[i % num_workers].put(pos)
+    
+    with ProcessPoolExecutor(max_workers=num_workers) as executor:
+        futures = [executor.submit(find_fibonacci_position, queues[i], queues[:i] + queues[i+1:], result_list, modul, pisano_period, lock) for i in range(num_workers)]
+        
+        # Thu thập kết quả ngay khi mỗi worker hoàn thành
+        for future in as_completed(futures):
+            future.result()
+
+    results = list(result_list)
     results.sort(key=lambda x: positions.index(x[0]))
     return results
 
-def MAIN(inputfile = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt"):
+def MAIN(inputfile="/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt"):
     with open(inputfile, "r") as file:
         data = file.readlines()
     first_line = data[0].strip().split()
     n = int(first_line[0])
     modul = int(first_line[1])
-    positions = [int(line.strip()) for line in data[1:n+1]]
+    positions = [int(line.strip()) for line in data[1:n + 1]]
     start_time = time.time()
     results = parallel_fibonacci_positions(positions, modul)
     end_time = time.time()
