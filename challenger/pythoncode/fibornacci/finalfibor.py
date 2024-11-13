@@ -1,4 +1,6 @@
 import multiprocessing
+from concurrent.futures import ProcessPoolExecutor
+from functools import lru_cache
 
 # Hàm tính số Fibonacci sử dụng phương pháp fast doubling với chu kỳ Pisano
 def fibonacci_fast_doubling_bitwise(n, modul):
@@ -23,7 +25,8 @@ def find_fibonacci_position(positions, modul, pisano_period):
         results.append((pos, fibonacci_fast_doubling_bitwise(pos_mod_pisano, modul)))
     return results
 
-# Hàm tính chu kỳ Pisano cho một modul cụ thể
+# Sử dụng bộ nhớ đệm để tránh tính lại chu kỳ Pisano cho cùng một modul
+@lru_cache(maxsize=None)
 def get_pisano_period(modul):
     a, b = 0, 1
     for i in range(0, modul * modul):
@@ -32,21 +35,23 @@ def get_pisano_period(modul):
             return i + 1
     return None
 
-# Hàm chính để xử lý song song các vị trí
+# Hàm chính để xử lý song song các vị trí sử dụng ProcessPoolExecutor
 def parallel_fibonacci_positions(positions, modul):
-    num_workers = multiprocessing.cpu_count()
-    chunk_size = max(1, len(positions) // num_workers)  # Đảm bảo chunk_size không bao giờ bằng 0
-    chunks = [positions[i:i + chunk_size] for i in range(0, len(positions), chunk_size)]
-    
     pisano_period = get_pisano_period(modul)  # Tính chu kỳ Pisano một lần duy nhất
+    num_workers = multiprocessing.cpu_count()
 
-    with multiprocessing.Pool(processes=num_workers) as pool:
-        results = pool.starmap(find_fibonacci_position, [(chunk, modul, pisano_period) for chunk in chunks])
+    # Tạo các chunk động để phân phối công việc tốt hơn
+    chunk_size = max(100, len(positions) // (num_workers * 10))  # Điều chỉnh kích thước chunk linh hoạt
+    chunks = [positions[i:i + chunk_size] for i in range(0, len(positions), chunk_size)]
 
-    # Gộp kết quả và sắp xếp lại theo thứ tự ban đầu
-    results = [item for sublist in results for item in sublist]  # Flatten the list
+    results = []
+    with ProcessPoolExecutor(max_workers=num_workers) as executor:
+        futures = [executor.submit(find_fibonacci_position, chunk, modul, pisano_period) for chunk in chunks]
+        for future in futures:
+            results.extend(future.result())
+
+    # Sắp xếp lại kết quả theo thứ tự ban đầu
     results.sort(key=lambda x: positions.index(x[0]))
-
     return results
 
 def MAIN(inputfile = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt"):
@@ -59,7 +64,8 @@ def MAIN(inputfile = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/cha
 
     results = parallel_fibonacci_positions(positions, modul)
     return results, modul
+
 if __name__ == "__main__":
-    output , modul = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt")
-    #for pos, result in output:
-        #print(f"{pos} % {modul} = {result}")
+    output, modul = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt")
+    for pos, result in output:
+        print(f"{pos} % {modul} = {result}")
