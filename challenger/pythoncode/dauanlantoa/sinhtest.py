@@ -41,7 +41,7 @@ def save_test_data(filename, data):
 filename = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/input.txt"
 
 # Sinh 100 bộ test dữ liệu ngẫu nhiên
-test_data = generate_test_data(100000)
+test_data = generate_test_data(10**6)
 
 # Lưu dữ liệu vào tệp
 save_test_data(filename, test_data)

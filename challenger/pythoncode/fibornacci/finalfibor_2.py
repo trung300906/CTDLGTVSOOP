@@ -89,3 +89,4 @@ if __name__ == "__main__":
     output, modul = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt")
     for pos, result in output:
         print(f"F({pos}) % {modul} = {result}")
+    print(len(output))
