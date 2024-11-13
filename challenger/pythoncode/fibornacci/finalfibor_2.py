@@ -25,7 +25,7 @@ def find_fibonacci_position(my_queue, other_queues, result_list, modul, pisano_p
     while True:
         pos = None
         with lock:
-            if not my_queue.empty():
+            if my_queue.qsize() > 0:
                 pos = my_queue.get()
             else:
                 # Steal work from another queue
