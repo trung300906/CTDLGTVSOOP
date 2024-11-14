@@ -26,7 +26,7 @@ def save_test_case_to_file(file_path, num_positions, modulus, positions):
             file.write(f"{pos}\n")
 
 def main():
-    num_positions = int(input("Enter the number of positions (n): "))
+    num_positions = 10**6
     max_modulus_value = 10**8 - 1
     file_path = "/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/inputfibornacci.txt"
 
