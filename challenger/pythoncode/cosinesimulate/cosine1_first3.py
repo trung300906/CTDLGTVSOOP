@@ -1,8 +1,7 @@
 import math
-import multiprocessing
-import concurrent.futures
 import collections
 from time import time
+from joblib import Parallel, delayed
 
 def dot_product(vec_a, vec_b):
     # Tính tích vô hướng của hai vector
@@ -16,15 +15,14 @@ def cosine_similarity(i, j, normalized_features):
     # Tính cosine similarity giữa vector đặc trưng i và j
     return dot_product(normalized_features[i], normalized_features[j])
 
-def compute_cosine_row(args):
-    i, normalized_features = args
+def compute_cosine_row(i, normalized_features):
     num_features = len(normalized_features)
     row_similarities = []
     for j in range(i, num_features):
         similarity = cosine_similarity(i, j, normalized_features)
         row_similarities.append((i, j, similarity))
     return row_similarities
-    
+
 def normalize_column(features, index):
     # Lấy cột (vector đặc trưng) và tính norm
     column = [row[index] for row in features]
@@ -36,10 +34,8 @@ def normalize_column(features, index):
 def compute_normalized_features(features, num_workers):
     num_features = len(features[0])
     
-    # Sử dụng ThreadPoolExecutor để tính toán chuẩn hóa cho từng cột
-    with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
-        # Normalize từng cột song song
-        normalized_features = list(executor.map(lambda i: normalize_column(features, i), range(num_features)))
+    # Sử dụng joblib.Parallel để tính toán chuẩn hóa cho từng cột
+    normalized_features = Parallel(n_jobs=num_workers)(delayed(normalize_column)(features, i) for i in range(num_features))
     
     return normalized_features
 
@@ -53,12 +49,8 @@ def compute_cosine_matrix(features, num_workers):
     # Khởi tạo ma trận cosine similarity
     cosine_matrix = [[0.0] * num_features for _ in range(num_features)]
     
-    # Tạo danh sách các công việc cần thực thi song song
-    tasks = [(i, normalized_features) for i in range(num_features)]
-    
-    # Sử dụng Pool để thực thi các công việc trong tasks song song
-    with concurrent.futures.ThreadPoolExecutor(max_workers = num_workers) as executor:
-        results = list(executor.map(compute_cosine_row, tasks))
+    # Sử dụng joblib.Parallel để tính toán song song
+    results = Parallel(n_jobs=num_workers)(delayed(compute_cosine_row)(i, normalized_features) for i in range(num_features))
         
     print("Done results!")
 

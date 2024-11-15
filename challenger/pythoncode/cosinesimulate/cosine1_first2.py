@@ -7,7 +7,7 @@ from time import time
 #t quá mệt mỏi t đã optimize cái đống này 2 ngày rồi và nó vẫn chạy quá lâu đếu mượt được
 #tối ưu kiểu gì cho 500 nghìn tỉ phép tính cho chạy dưới 60s ????? :)?
 #tính toán sơ bộ, ta có 8 lõi chạy, và 60s runtime
-#tức với O(N^2 * M)/2 với O(1 triệu tỉ) thì ta có trung bình 1s 1 lõi tính đâu đó 1 041 666 666 666 phép tính MỖI GIÂY :)
+#tức với O(N^2 * M)/2 với O(1 triệu tỉ) thì ta có trung bình 1s 1 lõi tính đâu đó 1 041 666 666 666 phép tính :)
 #tối ưu kiểu gì má :)
 # Hàm tính dot product sử dụng bitwise
 def bitwise_dot_product(vec1, vec2):
