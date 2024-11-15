@@ -1,61 +1,64 @@
-import numpy as np
-from multiprocessing import Pool, cpu_count
+import math
+from multiprocessing import Pool
 from time import time
+def dot_product(vec_a, vec_b):
+    # Tính tích vô hướng của hai vector
+    return sum(a * b for a, b in zip(vec_a, vec_b))
 
-def vector_norms(features):
-    """Tính chuẩn Euclidean cho mỗi vector trong ma trận."""
-    return np.linalg.norm(features, axis=1)
+def vector_norm(vec):
+    # Tính độ dài (norm) của vector
+    return math.sqrt(sum(x * x for x in vec))
 
-def cosine_similarity_task(task):
-    """Tính toán cosine similarity cho một cặp (i, j)."""
-    i, j, features, norms = task
-    dot_product = np.dot(features[i], features[j])
-    similarity = dot_product / (norms[i] * norms[j] + 1e-9)
-    return i, j, similarity
-
-def cosine_similarity_task_immediate_update(task):
-    """Tính toán cosine similarity cho một cặp (i, j) và cập nhật ngay ma trận."""
-    i, j, features, norms = task
-    dot_product = np.dot(features[i], features[j])
-    similarity = dot_product / (norms[i] * norms[j] + 1e-9)
-    return i, j, similarity
+def cosine_similarity(args):
+    i, j, features, norms = args
+    dot = dot_product(features[i], features[j])
+    if norms[i] == 0 or norms[j] == 0:
+        return i, j, 0.0  # Tránh chia cho 0 nếu norm bằng 0
+    return i, j, dot / (norms[i] * norms[j])
 
 def compute_cosine_matrix(features, num_workers):
-    # Chuyển ma trận để tính toán cosine similarity giữa các cột
-    features = np.array(features, dtype=np.float32).T
-    num_features = features.shape[0]
-
-    # Tính chuẩn của từng vector (từng cột trong ma trận gốc)
-    norms = vector_norms(features)
-
-    # Tạo danh sách các cặp (i, j) chỉ trong tam giác trên (i <= j)
-    tasks = [(i, j, features, norms) for i in range(num_features) for j in range(i, num_features)]
-
+    num_features = len(features[0])
+    num_products = len(features)
+    
+    # Chuyển đổi ma trận đặc trưng để mỗi cột là một vector đặc trưng
+    transposed_features = [[features[row][col] for row in range(num_products)] for col in range(num_features)]
+    
+    # Tính norm cho từng vector đặc trưng
+    norms = [vector_norm(transposed_features[i]) for i in range(num_features)]
+    
     # Khởi tạo ma trận cosine similarity
-    cosine_matrix = np.zeros((num_features, num_features), dtype=np.float32)
-
-    # Sử dụng multiprocessing để tính toán các cặp (i, j) và cập nhật ngay ma trận
-    with Pool(processes=num_workers) as pool:
-        for i, j, similarity in pool.imap_unordered(cosine_similarity_task_immediate_update, tasks):
-            cosine_matrix[i][j] = similarity
-            cosine_matrix[j][i] = similarity  # Ma trận đối xứng
+    cosine_matrix = [[0.0] * num_features for _ in range(num_features)]
+    
+    # Tạo danh sách các công việc cần thực thi song song
+    tasks = [(i, j, transposed_features, norms) for i in range(num_features) for j in range(i, num_features)]
+    
+    # Sử dụng Pool để thực thi các công việc trong tasks song song
+    with Pool(processes = num_workers) as pool:
+        results = pool.map(cosine_similarity, tasks)
+    
+    # Nhận kết quả và cập nhật ma trận đối xứng
+    for i, j, similarity in results:
+        similarity = round(similarity, 4)
+        cosine_matrix[i][j] = similarity
+        cosine_matrix[j][i] = similarity  # Ma trận đối xứng
 
     return cosine_matrix
 
 def main(input_file):
-    # Đọc dữ liệu từ file đầu vào
-    start = time()
+    # Đọc dữ liệu từ file
     with open(input_file, 'r') as f:
         n, m = map(int, f.readline().strip().split())
         features = [list(map(int, f.readline().strip().split())) for _ in range(n)]
     
-    # Tính toán ma trận cosine similarity
-    cosine_matrix = compute_cosine_matrix(features, min(cpu_count(), 24))
+    start = time()
+    # Tính ma trận cosine similarity
+    cosine_matrix = compute_cosine_matrix(features, 8 )
     end = time()
-    return cosine_matrix, end - start
+    return cosine_matrix, end -start
 
 if __name__ == "__main__":
     output, time_run = main("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/cosinesimulate/input.txt")
+    # In kết quả ra màn hình console (nếu cần)
     for line in output:
-        print(" ".join(f"{value:.4f}" for value in line))
-    print(f"Execution Time: {time_run:.4f} seconds")
+        print(" ".join(str(round(value, 4)) for value in line))
+    print(time_run)
