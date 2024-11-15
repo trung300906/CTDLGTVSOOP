@@ -1,8 +1,6 @@
 import concurrent.futures
-import os
 import math
 import collections
-from time import time
 
 # Hàm tính dot product sử dụng bitwise
 def bitwise_dot_product(vec1, vec2):
@@ -27,7 +25,7 @@ def cosine_similarity_matrix(features):
     similarity_matrix = [[0.0 for _ in range(num_features)] for _ in range(num_features)]
 
     # Sử dụng concurrent.futures để tính toán song song với ProcessPoolExecutor
-    with concurrent.futures.ProcessPoolExecutor(max_workers=os.cpu_count()) as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
         future_to_index = {(i, j): executor.submit(cosine_similarity, [row[i] for row in features], [row[j] for row in features]) 
                            for i in range(num_features) for j in range(i, num_features)}
 
@@ -38,11 +36,11 @@ def cosine_similarity_matrix(features):
     return similarity_matrix
 
 # Hàm chính để đọc dữ liệu và tính toán ma trận cosine similarity
-def MAIN(input_file):
+def MAIN(inputfile ="input.txt"):
     features = collections.defaultdict(list)
 
     # Đọc dữ liệu từ file và lưu vào defaultdict
-    with open(input_file, "r") as file:
+    with open(inputfile, "r") as file:
         data = file.readlines()
 
     first_line = data[0].strip().split()
@@ -56,14 +54,12 @@ def MAIN(input_file):
     # Chuyển đổi defaultdict sang danh sách
     features = [features[i] for i in range(M)]
     
-    start = time()
     similarity_matrix = cosine_similarity_matrix(features)
-    end = time()
-    return similarity_matrix, end - start
+    return similarity_matrix
 
 # Sử dụng hàm MAIN để tính toán ma trận cosine similarity
 if __name__ == "__main__":
-    similarity_matrix, time_run = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/cosinesimulate/input.txt")
+    similarity_matrix = MAIN("input.txt")
     for row in similarity_matrix:
         print(" ".join(f"{value:.4f}" for value in row))
     print(time_run, "seconds")
