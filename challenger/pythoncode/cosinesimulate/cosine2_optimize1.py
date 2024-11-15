@@ -52,6 +52,6 @@ def main(input_file):
 
 if __name__ == "__main__":
     output, time_run = main("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/cosinesimulate/input.txt")
-    #for line in output:
-        #print(" ".join(f"{value:.4f}" for value in line))
+    for line in output:
+        print(" ".join(f"{value:.4f}" for value in line))
     print(f"Execution Time: {time_run:.4f} seconds")
