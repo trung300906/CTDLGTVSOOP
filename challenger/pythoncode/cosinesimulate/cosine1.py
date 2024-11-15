@@ -64,6 +64,6 @@ def MAIN(input_file):
 # Sử dụng hàm MAIN để tính toán ma trận cosine similarity
 if __name__ == "__main__":
     similarity_matrix, time_run = MAIN("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/cosinesimulate/input.txt")
-    #for row in similarity_matrix:
-        #print(" ".join(f"{value:.4f}" for value in row))
+    for row in similarity_matrix:
+        print(" ".join(f"{value:.4f}" for value in row))
     print(time_run, "seconds")

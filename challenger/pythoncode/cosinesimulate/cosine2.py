@@ -59,4 +59,6 @@ def main(input_file):
 if __name__ == "__main__":
     output, time_run = main("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/cosinesimulate/input.txt")
     # In kết quả ra màn hình console (nếu cần)
+    for line in output:
+        print(" ".join(str(round(value, 4)) for value in line))
     print(time_run)
