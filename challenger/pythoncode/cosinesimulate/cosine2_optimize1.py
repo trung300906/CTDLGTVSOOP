@@ -39,8 +39,7 @@ def compute_cosine_matrix(features, num_workers):
     return cosine_matrix
 
 def main(input_file):
-    # Đọc dữ liệu từ file đầu vào
-    start = time()
+    # Đọc dữ liệu từ file đầu vàolar
     with open(input_file, 'r') as f:
         n, m = map(int, f.readline().strip().split())
         features = [list(map(int, f.readline().strip().split())) for _ in range(n)]
