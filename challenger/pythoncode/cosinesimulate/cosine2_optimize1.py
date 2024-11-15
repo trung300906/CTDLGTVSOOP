@@ -46,7 +46,7 @@ def main(input_file):
         features = [list(map(int, f.readline().strip().split())) for _ in range(n)]
     
     # Tính toán ma trận cosine similarity
-    cosine_matrix = compute_cosine_matrix(features, min(cpu_count(), 8))
+    cosine_matrix = compute_cosine_matrix(features, min(24, 8))
     end = time()
     return cosine_matrix, end - start
 

@@ -9,7 +9,7 @@ def generate_test_data(num_products, num_features, output_file):
 
 if __name__ == "__main__":
     # Số lượng sản phẩm (dòng)
-    num_products = 1000 # Thay đổi giá trị này theo nhu cầu của bạn
+    num_products = 100000 # Thay đổi giá trị này theo nhu cầu của bạn
     # Số lượng đặc trưng mỗi sản phẩm (cột)
     num_features = 1000# Thay đổi giá trị này theo nhu cầu của bạn
     # Tên file đầu ra
