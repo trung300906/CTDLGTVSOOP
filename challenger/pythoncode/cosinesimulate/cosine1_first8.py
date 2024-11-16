@@ -58,13 +58,13 @@ def compute_cosine_matrix(features, num_workers):
     return cosine_matrix
 
 def main(input_file):
-    num_worker = 4
+    num_worker = 8
     # Read data from file
     # with open(input_file, 'r') as f:
     #     n, m = map(int, f.readline().strip().split())
     #     features = [list(map(int, f.readline().strip().split())) for _ in range(n)]
     
-    n, m = 10, 10
+    n, m = 10000, 1000
     features = [[_ + _ for _ in range(m)] for _ in range(n)]
     # n, m = 4, 3
     # features = [[3, 4, 1], [2, 4, 5], [4, 4, 2], [4, 5, 6]]
