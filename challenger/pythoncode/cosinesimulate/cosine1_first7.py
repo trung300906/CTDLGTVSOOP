@@ -25,41 +25,32 @@ def cosine_similarity_matrix(matrix, rows):
                 results[j][i] = similarity  # Ensure symmetry
     return results
 
-def print_matrix(matrix):
-    for row in matrix:
-        print(' '.join(f"{elem:.4f}" for elem in row))
-
-# Helper function for multi-processing
 def process_chunk(args):
-    matrix, rows, chunk = args
-    result_chunk = [[0.0] * rows for _ in range(len(chunk))]
-    for idx, i in enumerate(chunk):
+    matrix, rows, start_idx, end_idx = args
+    chunk_results = [[0.0] * rows for _ in range(end_idx - start_idx)]
+    for i in range(start_idx, end_idx):
         for j in range(i, rows):
             if i == j:
-                result_chunk[idx][j] = 1.0
+                chunk_results[i-start_idx][j] = 1.0
             else:
                 similarity = cosine_similarity(matrix[i], matrix[j])
-                result_chunk[idx][j] = similarity
-                result_chunk[j][i] = similarity  # Ensure symmetry
-    return result_chunk
+                chunk_results[i-start_idx][j] = similarity
+                chunk_results[j-start_idx][i] = similarity
+    return chunk_results, start_idx
 
-def parallel_cosine_similarity_matrix(matrix, rows, num_threads=cpu_count()):
-    chunks = []
-    chunk_size = math.ceil(rows / num_threads)
-    for i in range(0, rows, chunk_size):
-        chunks.append(list(range(i, min(i + chunk_size, rows))))
+def parallel_cosine_similarity_matrix(matrix, rows, num_chunks):
+    chunk_size = math.ceil(rows / num_chunks)
+    chunks = [(matrix, rows, i, min(i + chunk_size, rows)) for i in range(0, rows, chunk_size)]
     
-    with Pool(processes=num_threads) as pool:
-        results = pool.map(process_chunk, [(matrix, rows, chunk) for chunk in chunks])
-    
-    # Merge results
-    merged_results = [[0.0] * rows for _ in range(rows)]
-    for chunk in results:
-        for idx, row in enumerate(chunk):
-            for col in range(rows):
-                merged_results[idx][col] = row[col]
-    
-    return merged_results
+    with Pool(processes=num_chunks) as pool:
+        chunk_results = pool.map(process_chunk, chunks)
+
+    results = [[0.0] * rows for _ in range(rows)]
+    for chunk, start_idx in chunk_results:
+        for i in range(len(chunk)):
+            for j in range(rows):
+                results[start_idx + i][j] = chunk[i][j]
+    return results
 
 def self_check(result_parallel, result_sequential, rows):
     for i in range(rows):
@@ -68,8 +59,14 @@ def self_check(result_parallel, result_sequential, rows):
                 return False
     return True
 
-# Main function
-def main(n, m, num_threads=cpu_count()):
+def print_matrix(matrix):
+    for row in matrix:
+        print(' '.join(f"{elem:.4f}" for elem in row))
+
+def main(n, m, num_chunks=None):
+    if num_chunks is None:
+        num_chunks = cpu_count()  # Use all available cores
+
     # Initialize matrix
     matrix = create_matrix(n, m)
 
@@ -86,7 +83,7 @@ def main(n, m, num_threads=cpu_count()):
 
     # Parallel computation
     start_time = time.time()
-    result_parallel = parallel_cosine_similarity_matrix(matrix, n, num_threads)
+    result_parallel = parallel_cosine_similarity_matrix(matrix, n, num_chunks)
     end_time = time.time()
     runtime2 = end_time - start_time
     print("The parallel computation result: ")
@@ -100,8 +97,7 @@ def main(n, m, num_threads=cpu_count()):
     else:
         print("Self-check: The result of the parallel program is not the same as the sequential program.")
 
-# Execute the main function
 if __name__ == '__main__':
-    n = 3 # Example: number of rows
+    n = 3  # Example: number of rows
     m = 4  # Example: number of columns
-    main(n, m, num_threads=8)
+    main(n, m, num_chunks=16)

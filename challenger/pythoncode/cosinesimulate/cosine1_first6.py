@@ -2,7 +2,7 @@ import random
 import time
 import math
 from concurrent.futures import ThreadPoolExecutor
-
+import os
 # Matrix operations
 def create_matrix(n, m, min_value=0, max_value=100):
     return [[random.randint(min_value, max_value) for _ in range(m)] for _ in range(n)]
@@ -97,6 +97,6 @@ def main(n, m, num_threads=4):
 
 # Execute the main function
 if __name__ == '__main__':
-    n = 1000  # Example: number of rows
-    m = 1000  # Example: number of columns
+    n = 3  # Example: number of rows
+    m = 4  # Example: number of columns
     main(n, m, num_threads=8)
