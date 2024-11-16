@@ -29,13 +29,12 @@ def process_chunk(args):
     matrix, rows, start_idx, end_idx = args
     chunk_results = [[0.0] * rows for _ in range(end_idx - start_idx)]
     for i in range(start_idx, end_idx):
-        for j in range(i, rows):
+        for j in range(rows):
             if i == j:
-                chunk_results[i-start_idx][j] = 1.0
+                chunk_results[i - start_idx][j] = 1.0
             else:
                 similarity = cosine_similarity(matrix[i], matrix[j])
-                chunk_results[i-start_idx][j] = similarity
-                chunk_results[j-start_idx][i] = similarity
+                chunk_results[i - start_idx][j] = similarity
     return chunk_results, start_idx
 
 def parallel_cosine_similarity_matrix(matrix, rows, num_chunks):
@@ -100,4 +99,4 @@ def main(n, m, num_chunks=None):
 if __name__ == '__main__':
     n = 3  # Example: number of rows
     m = 4  # Example: number of columns
-    main(n, m, num_chunks=16)
+    main(n, m, num_chunks=8)

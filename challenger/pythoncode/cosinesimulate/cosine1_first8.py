@@ -3,10 +3,9 @@ from time import time
 import math
 from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import Manager
-from os import cpu_count
 
-def inner_product(vector_a, vector_b):
-    return sum(x * y for x, y in zip(vector_a, vector_b))
+def inner_product(matrix_a, matrix_b):
+    return sum(x * y for x, y in zip(matrix_a, matrix_b))
 
 # Helper functions for multi-processing
 def process_rows(matrix, rows, start_idx, end_idx, return_dict):
@@ -50,7 +49,7 @@ def compute_cosine_matrix(features, num_workers):
     for i, similarity in enumerate(results):
         for j, inner_product in enumerate(similarity):
             if results[i][0] == 0 or results[i + j][0] == 0:
-                detail_similarity = 0.0  # Avoid division by zero
+                detail_similarity = 0.0
             else:
                 detail_similarity = round(inner_product / math.sqrt(results[i][0] * results[i + j][0]), 4)
             cosine_matrix[i][i + j] = detail_similarity
@@ -59,13 +58,13 @@ def compute_cosine_matrix(features, num_workers):
     return cosine_matrix
 
 def main(input_file):
-    num_worker = cpu_count()
+    num_worker = 4
     # Read data from file
     # with open(input_file, 'r') as f:
     #     n, m = map(int, f.readline().strip().split())
     #     features = [list(map(int, f.readline().strip().split())) for _ in range(n)]
     
-    n, m = 10**6, 1000
+    n, m = 10, 10
     features = [[_ + _ for _ in range(m)] for _ in range(n)]
     # n, m = 4, 3
     # features = [[3, 4, 1], [2, 4, 5], [4, 4, 2], [4, 5, 6]]
@@ -78,5 +77,5 @@ def main(input_file):
 if __name__ == "__main__":
     output, time_run = main("input.txt")
     # Print results to console (if needed)
-    #print(output)
+    # print(output)
     print(time_run)
