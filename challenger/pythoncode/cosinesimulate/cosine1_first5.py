@@ -81,6 +81,6 @@ def main(n, m, num_threads=4):
 
 # Execute the main function
 if __name__ == '__main__':
-    n = 3  # Example: number of rows
+    n = 4  # Example: number of rows
     m = 3  # Example: number of columns
     main(n, m, num_threads=4)

@@ -28,17 +28,15 @@ def parallel_self_product(matrix, rows, num_workers):
                 future.result()  # Ensure all tasks are completed
         
         # Convert the dictionary to a full matrix
-        results = [[0] * (rows - i) for i in range(rows)]
+        results = [[0] * rows for _ in range(rows)]
         for idx, chunk in return_dict.items():
             for i, similarity in chunk.items():
-                results[i] = similarity
+                results[i][i:i + len(similarity)] = similarity
         return results
 
 def compute_cosine_matrix(features, num_workers):
     num_features = len(features[0])
-    num_products = len(features)
-    
-    transpose_features = [list(row) for row in zip(*features)]
+    transpose_features = [[features[j][i] for j in range(len(features))] for i in range(len(features[0]))]
     
     results = parallel_self_product(transpose_features, num_features, num_workers)
     
@@ -52,30 +50,25 @@ def compute_cosine_matrix(features, num_workers):
                 detail_similarity = 0.0
             else:
                 detail_similarity = round(inner_product / math.sqrt(results[i][0] * results[i + j][0]), 4)
-            cosine_matrix[i][i + j] = detail_similarity
-            cosine_matrix[i + j][i] = detail_similarity  # Symmetric matrix
+            if i + j < num_features:  # Ensure index is within bounds
+                cosine_matrix[i][i + j] = detail_similarity
+                cosine_matrix[i + j][i] = detail_similarity  # Symmetric matrix
 
     return cosine_matrix
 
 def main(input_file):
     num_worker = 8
-    # Read data from file
-    # with open(input_file, 'r') as f:
-    #     n, m = map(int, f.readline().strip().split())
-    #     features = [list(map(int, f.readline().strip().split())) for _ in range(n)]
-    
-    n, m = 10000, 1000
+    # Simulate large matrix
+    n, m = 3000, 1000
     features = [[_ + _ for _ in range(m)] for _ in range(n)]
-    # n, m = 4, 3
-    # features = [[3, 4, 1], [2, 4, 5], [4, 4, 2], [4, 5, 6]]
+    
     start = time()
     # Compute cosine similarity matrix
     cosine_matrix = compute_cosine_matrix(features, num_worker)
     end = time()
+    
     return cosine_matrix, end - start
 
 if __name__ == "__main__":
     output, time_run = main("input.txt")
-    # Print results to console (if needed)
-    # print(output)
     print(time_run)

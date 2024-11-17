@@ -70,7 +70,7 @@ def main(n, m, num_chunks=None):
     matrix = create_matrix(n, m)
 
     print("The initial grid: ")
-    #print_matrix(matrix)
+    print_matrix(matrix)
 
     # Sequential computation
     start_time = time.time()
@@ -86,7 +86,7 @@ def main(n, m, num_chunks=None):
     end_time = time.time()
     runtime2 = end_time - start_time
     print("The parallel computation result: ")
-    #print_matrix(result_parallel)
+    print_matrix(result_parallel)
     print(f"Sequential computation took {runtime1:.4f} seconds")
     print(f"Parallel computation took {runtime2:.4f} seconds")
 
@@ -97,6 +97,6 @@ def main(n, m, num_chunks=None):
         print("Self-check: The result of the parallel program is not the same as the sequential program.")
 
 if __name__ == '__main__':
-    n = 1000  # Example: number of rows
-    m = 1000  # Example: number of columns
+    n = 4  # Example: number of rows
+    m = 3 # Example: number of columns
     main(n, m, num_chunks=8)
