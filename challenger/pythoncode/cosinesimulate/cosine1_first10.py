@@ -1,5 +1,5 @@
 import math
-from multiprocessing import Pool
+from multiprocessing import Pool, Manager
 
 # Hàm tính inner product của hai vector
 def inner_product(vec1, vec2):
@@ -10,6 +10,8 @@ def cosine_similarity(vec1, vec2):
     dot_product = inner_product(vec1, vec2)
     norm1 = math.sqrt(inner_product(vec1, vec1))
     norm2 = math.sqrt(inner_product(vec2, vec2))
+    if norm1 == 0 or norm2 == 0:
+        return 0.0
     return dot_product / (norm1 * norm2)
 
 # Hàm tính ma trận cosine similarity của một khối
@@ -21,33 +23,29 @@ def compute_cosine_similarity(chunk):
             result[i][j] = cosine_similarity(chunk[i], chunk[j])
     return result
 
-# Hàm đọc và xử lý dữ liệu trực tiếp từ file
-def process_chunk(file_path, chunk_size, start_line, num_lines):
-    result_matrix = None
+# Hàm đọc và xử lý dữ liệu trực tiếp từ file và cập nhật ma trận kết quả
+def process_chunk(file_path, chunk_size, start_line, num_lines, result_matrix, lock):
     chunk_lines = []
-    
     with open(file_path, 'r') as file:
-        lines = file.readlines()[start_line:start_line + num_lines]
-        for line in lines:
+        for i, line in enumerate(file):
+            if i < start_line:
+                continue
+            if i >= start_line + num_lines:
+                break
             chunk_lines.append([float(x) for x in line.strip().split()])
             if len(chunk_lines) == chunk_size:
                 chunk_result = compute_cosine_similarity(chunk_lines)
-                if result_matrix is None:
-                    result_matrix = chunk_result
-                else:
-                    for i in range(chunk_size):
-                        for j in range(chunk_size):
-                            result_matrix[i][j] += chunk_result[i][j]
+                with lock:
+                    for r in range(chunk_size):
+                        for c in range(chunk_size):
+                            result_matrix[r][c] += chunk_result[r][c]
                 chunk_lines = []
         if chunk_lines:
             chunk_result = compute_cosine_similarity(chunk_lines)
-            if result_matrix is None:
-                result_matrix = chunk_result
-            else:
-                for i in range(len(chunk_lines)):
-                    for j in range(len(chunk_lines)):
-                        result_matrix[i][j] += chunk_result[i][j]
-    return result_matrix
+            with lock:
+                for r in range(len(chunk_lines)):
+                    for c in range(len(chunk_lines)):
+                        result_matrix[r][c] += chunk_result[r][c]
 
 # Hàm chính để chia ma trận và xử lý song song
 def main(file_path, processes):
@@ -57,31 +55,29 @@ def main(file_path, processes):
         M = int(first_line[1])
     
     chunk_size = int(math.log(N * M))
-    num_lines = chunk_size  # Số dòng cho mỗi chunk
-    total_lines = N
-    lines_per_process = total_lines // processes
-    chunks = []
-    start_line = 1  # Bắt đầu đọc từ dòng thứ hai vì dòng đầu tiên chứa kích thước ma trận
+    if chunk_size > N:
+        chunk_size = N
+    if chunk_size > M:
+        chunk_size = M
+    total_chunks = N // chunk_size
+    num_lines = chunk_size
+    start_line = 1
     
-    for i in range(processes):
-        chunks.append((file_path, chunk_size, start_line + i * lines_per_process, lines_per_process))
+    manager = Manager()
+    result_matrix = manager.list([[0.0 for _ in range(N)] for _ in range(N)])
+    lock = manager.Lock()
+    
+    chunks = [(file_path, chunk_size, start_line + i * chunk_size, chunk_size, result_matrix, lock) for i in range(total_chunks)]
     
     pool = Pool(processes)
-    result_matrix = pool.starmap(process_chunk, chunks)
+    pool.starmap(process_chunk, chunks)
     pool.close()
     pool.join()
     
-    # Gộp kết quả từ các chunk
-    final_matrix = [[0.0 for _ in range(chunk_size)] for _ in range(chunk_size)]
-    for matrix in result_matrix:
-        for i in range(len(matrix)):
-            for j in range(len(matrix[i])):
-                final_matrix[i][j] += matrix[i][j]
-    
-    return final_matrix
+    return result_matrix
 
 # Đường dẫn đến file dữ liệu
-file_path = 'data.txt'
+file_path = '/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/cosinesimulate/input.txt'
 
 # Số lượng tiến trình song song
 processes = 8

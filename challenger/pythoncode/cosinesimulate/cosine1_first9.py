@@ -48,7 +48,7 @@ def compute_cosine_matrix(features, num_workers):
     return cosine_matrix
 
 def main(input_file):
-    num_worker = cpu_count()
+    num_worker = cpu_count()*2
     # Read data from file
     with open(input_file, 'r') as f:
         n, m = map(int, f.readline().strip().split())

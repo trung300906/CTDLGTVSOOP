@@ -81,5 +81,5 @@ def main(input_file):
     return cosine_matrix, end - start
 
 if __name__ == "__main__":
-    output, time_run = main("D:\\code\\CTDLGTVSOOP\\challenger\\pythoncode\\cosinesimulate\\input.txt")
+    output, time_run = main("/run/media/trunglinux/linuxandwindows/code/CTDLGTVSOOP/challenger/pythoncode/cosinesimulate/input.txt")
     print(time_run)
