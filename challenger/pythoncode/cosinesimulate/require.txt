@@ -1,6 +1,6 @@
 trả lời bằng tiếng việt
 viết đoạn code python tính cosine similarity theo ý tưởng: ma trận cosine similarity là bằng tổng total tích vô hướng của các ma trận con của ma trận đầu vào cần tính 
-   -với cách xử lý sau: đọc từ file kích thước của ma trận đầu vào(bên dưới là file input mẫu), chia ma trận đầu vào thành các submatrix(ma trận con) phù hợp với kích thước của ma trận đầu vào (tối thiểu mỗi submatrix có 2 phần tử(tượng trưng cho 2 vector để nhân inner_product)), nếu số submatrix chia nhỏ vẫn không đủ phân chia cho đủ số lượng các lõi để mỗi lõi có việc, thì chia được bao nhiêu lõi thì bấy nhiêu lõi đó làm việc(chia sao cho nhiều lõi làm việc nhất có thể, và dùng các thư viện như Pool hoặc multiprocess)
+   -với cách xử lý sau: đọc từ file để truy xuất ra kích thước của ma trận đầu vào(bên dưới là file input mẫu), chia ma trận đầu vào thành các submatrix(ma trận con) phù hợp với kích thước của ma trận đầu vào (tối thiểu mỗi submatrix có 2 phần tử(tượng trưng cho 2 vector để nhân inner_product)), nếu số submatrix chia nhỏ vẫn không đủ phân chia cho đủ số lượng các lõi để mỗi lõi có việc, thì chia được bao nhiêu lõi thì bấy nhiêu lõi đó làm việc(chia sao cho nhiều lõi làm việc nhất có thể, và dùng các thư viện như Pool hoặc multiprocess)
    ví dụ:
    matrix A có 3 x 3 phần tử:
     1 2 3
@@ -22,31 +22,13 @@ cách xử lý matrix để ra kết quả đầu ra cuối cùng là cosine sim
                                         9*7	9*8	9^2
     các kết quả được lưu trực tiếp vào 1 biến trong quá trình xử lý, tức là xử lý xong tới đâu thì lưu tới đó
     lấy ví dụ như submatrix_1 được lõi 1 xử lý trước và các lõi 2 và 3 chưa xử lý xong submatrix đang đảm nhận , thì mặc kệ các lõi 2 và 3 chưa xử lý xong thì lõi 1 cứ việc đẩy kết quả vào 1 biến, nếu lõi 2 và 3 xử lý xong sau thì nó sẽ đẩy vào sau
-
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+các submatrix kết quả sau nhân inner_product thì sau đó ta sẽ tính tổng, và dựa vào đó để mà tính ra ma trận cosine_similarity
+vì tính cosine_similarity theo cột, và cosine_similarity = tích vô hướng(vectora, vectorb)/abs(vectora)*abs(vectorb)
+thế cosine_similarity của A = tổng total của các submatrix con của nó
+ví dụ như ma trận A ở bên trên thì sẽ có kết quả cosine là:
+(1^2 +4^2 + 7^2)/sqrt(1^2 +4^2 + 7^2)*sqrt(1^2 +4^2 + 7^2)	(2*1 + 4*5 + 8*7)/sqrt(1^2 +4^2 +7^2)*sqrt(2^2 + 5^2 + 8^2)	(3*1 + 4*6 + 9*7)/sqrt(3^2 + 6^2 + 9^2)*sqrt(1^2 + 4^2 + 7^2)
+(2*1 + 4*5 + 8*7)/sqrt(1^2 +4^2 +7^2)*sqrt(2^2 + 5^2 + 8^2)	(2^2 +5^2 + 8^2)/sqrt(2^2 +5^2 + 8^2)*sqrt(2^2 +5^2 + 8^2)	(3*2 + 5*6 + 9*8)/sqrt(3^2 + 6^2 + 9^2)*sqrt(2^2 + 5^2 + 8^2)
+(3*1 + 4*6 + 9*7)/sqrt(3^2 + 6^2 + 9^2)*sqrt(1^2 + 4^2 + 7^2)	(3*2 + 5*6 + 9*8)/sqrt(3^2 + 6^2 + 9^2)*sqrt(2^2 + 5^2 + 8^2)	(3^2 +6^2 +9^2)/sqrt(3^2 +6^2 +9^2)*sqrt(3^2 +6^2 +9^2)
 
 
 input mẫu để check logic
@@ -79,3 +61,4 @@ các thư viện được phép dùng:
 YÊU CẦU CAO NHẤT: CHẠY ĐÚNG KẾT QUẢ, CHẠY NHANH VÀ DƯỚI 20S RUNTIME VỚI TRƯỜNG HỢP MA TRẬN ĐẦU VÀO 10^6 X 10^3, không dùng thư viện ngoài, cấm dùng GPU
 
 
+[1,2,3,2,4,5,56,6,9,9,9,0,9,9,9,0,1]
