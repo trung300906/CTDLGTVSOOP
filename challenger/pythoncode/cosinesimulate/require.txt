@@ -1,6 +1,54 @@
 trả lời bằng tiếng việt
 viết đoạn code python tính cosine similarity theo ý tưởng: ma trận cosine similarity là bằng tổng total tích vô hướng của các ma trận con của ma trận đầu vào cần tính 
-   -với cách xử lý sau: đọc từ file kích thước của ma trận đầu vào(bên dưới là file input mẫu), chia ma trận đầu vào thành các submatrix(ma trận con) phù hợp với kích thước của ma trận đầu vào
+   -với cách xử lý sau: đọc từ file kích thước của ma trận đầu vào(bên dưới là file input mẫu), chia ma trận đầu vào thành các submatrix(ma trận con) phù hợp với kích thước của ma trận đầu vào (tối thiểu mỗi submatrix có 2 phần tử(tượng trưng cho 2 vector để nhân inner_product)), nếu số submatrix chia nhỏ vẫn không đủ phân chia cho đủ số lượng các lõi để mỗi lõi có việc, thì chia được bao nhiêu lõi thì bấy nhiêu lõi đó làm việc(chia sao cho nhiều lõi làm việc nhất có thể, và dùng các thư viện như Pool hoặc multiprocess)
+   ví dụ:
+   matrix A có 3 x 3 phần tử:
+    1 2 3
+    4 5 6
+    7 8 9
+    thì các submatrix gồm:
+    submatrix_1 = 1 2 3 do lõi 1 xử lý
+    submatrix_2 = 4 5 6 do lõi 2 xử lý
+    submatrix_3 = 7 8 9 đo lõi 3 xử lý
+cách xử lý matrix để ra kết quả đầu ra cuối cùng là cosine similarity:
+    submatrix_1 sau nhân inner product= 1^2 1*3 1*4 
+                                        2*1	2^2	2*3
+                                        3*1	3*2	3^2
+    submatrix_2 sau nhân inner_product= 4^2	4*5	4*6
+                                        4*5	5^2	5*6
+                                        4*6	5*6	6^2
+    submatrix_3 sau nhân inner_product= 7^2	7*8	7*9
+                                        8*7	8^2	8*9
+                                        9*7	9*8	9^2
+    các kết quả được lưu trực tiếp vào 1 biến trong quá trình xử lý, tức là xử lý xong tới đâu thì lưu tới đó
+    lấy ví dụ như submatrix_1 được lõi 1 xử lý trước và các lõi 2 và 3 chưa xử lý xong submatrix đang đảm nhận , thì mặc kệ các lõi 2 và 3 chưa xử lý xong thì lõi 1 cứ việc đẩy kết quả vào 1 biến, nếu lõi 2 và 3 xử lý xong sau thì nó sẽ đẩy vào sau
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 input mẫu để check logic
 4 3 #kích thước của ma trận đầu vào
 3 4 1
@@ -31,70 +79,3 @@ các thư viện được phép dùng:
 YÊU CẦU CAO NHẤT: CHẠY ĐÚNG KẾT QUẢ, CHẠY NHANH VÀ DƯỚI 20S RUNTIME VỚI TRƯỜNG HỢP MA TRẬN ĐẦU VÀO 10^6 X 10^3, không dùng thư viện ngoài, cấm dùng GPU
 
 
-Here is the English translation of your request:
-
----
-
-**Write a Python script to calculate the normalization based on the following idea**:  
-The cosine similarity matrix is obtained as the total sum of dot products of submatrices of the input matrix to be computed.  
-
-### Requirements:
-1. **Submatrix Partitioning**:  
-   - Divide the input matrix into submatrices, where each submatrix has rows and columns equal to \( \log(N \times M) \), with \( N \) as the number of rows and \( M \) as the number of columns of the original matrix.  
-   - The set of \( n \) submatrices will form a *chunk*, where each core processes a chunk in parallel. The number of chunks = the number of processes.  
-
-2. **Stream Processing**:  
-   - Read and process the input matrix directly from the file, computing the result as you read.  
-   - Do not store the entire input matrix in a variable to process later, as the input size may be very large and cause memory overflow.  
-
-3. **Direct Writing**:  
-   - Write results directly into the result matrix as computations are completed.  
-   - Avoid using intermediate variables or iterating over the original matrix afterward.  
-
-4. **Dot Product Calculation**:  
-   - Use `inner_product` for the dot product of submatrices.  
-
-5. **Library Restrictions**:  
-   - Do **not** use NumPy or any external libraries.  
-
-6. **Parallelism**:  
-   - The machine has a maximum of 10 cores to leverage parallel processing.  
-
-### Input Example:
-```
-4 3
-3 4 1
-2 4 5
-4 4 2
-4 5 6
-```
-
-### Output Example:
-```
-1.0000 0.9771 0.8257
-0.9771 1.0000 0.8932
-0.8257 0.8932 1.0000
-```
-
-### Additional Notes:
-- **Performance Requirement**:  
-  The code must produce the correct result and execute in under **20 seconds** for an input matrix of size \( 10^6 \times 10^3 \).  
-- **Hardware Constraints**:  
-  - No use of GPU.  
-  - Only the following libraries are allowed:
-    ```
-    threading
-    multiprocessing
-    concurrent.futures
-    asyncio
-    joblib
-    string
-    re
-    collections
-    queue
-    math
-    cmath
-    decimal
-    fractions
-    random
-    ```
