@@ -15,7 +15,7 @@ def closest_pair_recursive(points):
     right_half = points[mid:]
     
     # Tính toán song song cho hai nửa
-    with ThreadPoolExecutor(max_workers=2) as executor:
+    with ThreadPoolExecutor(max_workers=8) as executor:
         future_left = executor.submit(closest_pair_recursive, left_half)
         future_right = executor.submit(closest_pair_recursive, right_half)
         
