@@ -7,6 +7,7 @@ vector<int> selection_sort(vector<int> &v)
     {
         auto min_idx = min_element(v.begin() + i, v.end());
         int min_pos = distance(v.begin(), min_idx);
+        swap(v[i], v[min_pos]); // swap the current element with the minimum element from the remaining unsorted array.
     }
     return v;
 }
@@ -19,5 +20,5 @@ int main()
         cin >> v[i];
     selection_sort(v);
     for (auto &i : v)
-        cout << i << endl;
+        cout << i << " ";
 }
