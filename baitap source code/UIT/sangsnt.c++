@@ -31,15 +31,16 @@ int main()
     int count = 0;
     cin >> n;
     sang();
-    for (int i = 2; i <= n; i++)
+    for (int i = 2; i <= 100; i++)
     {
         if (prime[i])
         {
-            if (prime[i - 2])
-            {
-                cout << i - 2 << ", " << i << endl;
-                count++;
-            }
+            // if (prime[i - 2])
+            //{
+            // cout << i - 2 << ", " << i << endl;
+            // count++;
+            //}
+            cout << i << endl;
         }
     }
     cout << "Tong: " << count << " cap so sinh doi < " << n;
