@@ -19,6 +19,5 @@ int main(){
         else cout << "-1" << " ";
         st.push(i);
     }
- 
     return 0;
 }
