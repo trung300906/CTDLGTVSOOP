@@ -10,6 +10,7 @@ int main()
     }
     vector<int>::iterator it = find(vec.begin(), vec.end(), 5);
     int distance_element = distance(vec.begin(), it);
+    // distance function returns the number of elements that it (aka iterator point in an container)...
     cout << "The first occurrence of 5 is at position: " << distance_element << endl;
     return 0;
 }
