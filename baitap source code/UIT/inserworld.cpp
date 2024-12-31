@@ -24,6 +24,7 @@ int main()
         ChenChuoiTaiVitriK(s, s1, k);
         cout << s;
     }
+    return 0;
 }
 
 int myStrlen(char s[], int k)
@@ -43,17 +44,17 @@ void ChenChuoiTaiVitriK(char s[], char s1[], int k)
     int len = myStrlen(s, 0);
     int len1 = myStrlen(s1, 0);
 
-    // Remove newline character if present
     if (s1[len1 - 1] == '\n')
         s1[len1 - 1] = '\0';
-    if (s[len - 1] == '\n')
-        s[len - 1] = '\0';
+    /*if (s[len - 1] == '\n')
+        s[len - 1] = '\0';*/
 
     len1 = myStrlen(s1, 0);
     len = myStrlen(s, 0);
+    
     for (int i = len; i >= k; i--)
     {
-        s[i + len1 + 1] = s[i];
+        s[i + len1] = s[i];
     }
 
     for (int i = 0; i < len1; i++)
@@ -61,5 +62,5 @@ void ChenChuoiTaiVitriK(char s[], char s1[], int k)
         s[k + i] = s1[i];
     }
 
-    s[len + len1 + 1] = '\0';
+    s[len + len1] = '\0';
 }
