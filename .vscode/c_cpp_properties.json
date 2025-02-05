@@ -12,6 +12,19 @@
       "cStandard": "${default}",
       "cppStandard": "${default}",
       "intelliSenseMode": "linux-gcc-x64"
+    },
+    {
+      "name": "linux-clang-x64",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/usr/include",
+        "/usr/local/include"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/clang++",
+      "cStandard": "${default}",
+      "cppStandard":  "${default}",
+      "intelliSenseMode": "clang-x64"
     }
   ],
   "version": 4
