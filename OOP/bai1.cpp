@@ -6,17 +6,35 @@ class Sinhvien
 private:
     string id, ten, mssv;
     double gpa;
+    int secrec = 42;
 
 public:
     Sinhvien();                               // this is an constructor
     Sinhvien(string, string, string, double); // this is constructor with parameters
     void xinchao();
     void diemcuasinhvien();
+    void nhap();
+    void output()
+    {
+        cout << "nhap ten: ";
+        cout << ten;
+        cout << "nhap id: ";
+        cout << id;
+        cout << "nhap mssv: ";
+        cout << mssv;
+        cout << "nhap gpa: ";
+        cout << gpa;
+    }
+    ~Sinhvien();
 };
 
 Sinhvien::Sinhvien()
 {
     cout << " this is constructor without parameters...\n";
+}
+Sinhvien::~Sinhvien()
+{
+    cout << "this object was destroy... \n";
 }
 Sinhvien::Sinhvien(string code, string name, string iden, double dtb)
 {
@@ -35,11 +53,29 @@ void Sinhvien::diemcuasinhvien()
 {
     cout << "this is method diemcuasinhvien from sinhvien class\n";
 }
+void Sinhvien::nhap()
+{
+    cout << "nhap ten: " << endl;
+    cin >> ten;
+    cout << "nhap id: " << endl;
+    cin >> id;
+    cout << "nhap mssv: " << endl;
+    cin >> mssv;
+    cout << "nhap gpa: " << endl;
+    cin >> gpa;
+}
 int main()
 {
-    Sinhvien x;
-    x.xinchao();
-    x.diemcuasinhvien();
+    {
+        Sinhvien x;
+        x.xinchao();
+        x.diemcuasinhvien();
+        x.nhap();
+        x.output();
+    }
+    Sinhvien z;
+    int *ptr = (int *)&z;
+    cout << *ptr << endl;
     // cout << x.gpa << endl;
     Sinhvien y("123", "trung", "22334", 10.0);
 }

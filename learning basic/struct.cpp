@@ -15,14 +15,15 @@ struct diem
     int value3;
     struct_type infi;
 };
+
 int main()
 {
     // normal interactive
-    struct_type struct_type;
-    struct_type.value1 = 10;
-    struct_type.value2 = 20;
-    struct_type.vlue3 = 30.5;
-    cout << struct_type.value1 << " " << struct_type.value2 << " " << struct_type.vlue3 << endl;
+    struct_type test;
+    test.value1 = 10;
+    test.value2 = 20;
+    test.vlue3 = 30.5;
+    cout << test.value1 << " " << test.value2 << " " << test.vlue3 << endl;
     // using with array
     struct_type array_struct[3];
     for (int i = 0; i < 3; i++)
@@ -50,13 +51,13 @@ int main()
         cout << vector_struct[i].value1 << " " << vector_struct[i].value2 << " " << vector_struct[i].vlue3 << endl;
     }
     // interact with struct diem
-    diem diem;
-    diem.value1 = 1;
-    diem.value2 = 2;
-    diem.infi.value1 = 10;
-    diem.infi.value2 = 20;
-    diem.infi.value3 = 3.14;
-    cout << diem.value1 << diem.value2 << diem.infi.value1 << diem.infi.value2 << diem.infi.value3 << endl;
+    diem check;
+    check.value1 = 1;
+    check.value2 = 2;
+    check.infi.value1 = 10;
+    check.infi.value2 = 20;
+    check.infi.vlue3 = 3.14;
+    cout << check.value1 << check.value2 << check.infi.value1 << check.infi.value2 << check.infi.vlue3 << endl;
     // interact with class vector
     vector<diem> vector_diem;
     for (int i = 0; i < 3; i++)
@@ -66,11 +67,11 @@ int main()
         temp.value2 = i * 20;
         temp.infi.value1 = i * 100;
         temp.infi.value2 = i * 200;
-        temp.infi.value3 = i * 3.14;
+        temp.infi.vlue3 = i * 3.14;
         vector_diem.push_back(temp);
     }
     for (auto &i : vector_diem)
     {
-        cout << i.value1 << i.value2 << i.infi.value1 << i.infi.value2 << i.infi.value3 << endl;
+        cout << i.value1 << i.value2 << i.infi.value1 << i.infi.value2 << i.infi.vlue3 << endl;
     }
 }
