@@ -15,7 +15,7 @@ public:
     }
 };
 
-class papa : public grand
+class papa : public grand // cannot access private , just can access protected and public class from grand
 {
 private:
     string gen_type;
@@ -28,7 +28,7 @@ public:
         return this->gen_type;
     }
 };
-class child : private papa //=> public
+class child : private papa //=> private all public and protected of papa classs and also grand class
 {
 private:
     string gen_type;
@@ -43,6 +43,7 @@ public:
         return this->gen_type;
     }
 };
+
 int main()
 {
     papa obj;
