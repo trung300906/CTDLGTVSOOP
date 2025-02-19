@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-ios_base::sync_with_stdio(TRUE);
-cin.tie(NULL);
 class myclass
 {
 private:
@@ -33,6 +31,8 @@ public:
 };
 int main()
 {
+    ios_base::sync_with_stdio(NULL);
+    cin.tie(NULL);
     myclass x;
     myclass y;
     cin >> x;
