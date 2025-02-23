@@ -1,16 +1,17 @@
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
-int foo()
+struct st
 {
-    if (true)
-        return 42;
-}
+    int x;
+    struct st next;
+};
+
 int main()
 {
-    void *ptr = malloc(10);
-    int *p = (int *)ptr; // Ép kiểu tường minh
-    cout << *p;          // Truy cập không hợp lệ, cần khởi tạo giá trị cho `p`
-    free(ptr);           // Giải phóng bộ nhớ tránh rò rỉ
-    foo();
+    struct st temp;
+    temp.x = 10;
+    temp.next = temp;
+    cout << temp.next.x;
+    return 0;
 }
