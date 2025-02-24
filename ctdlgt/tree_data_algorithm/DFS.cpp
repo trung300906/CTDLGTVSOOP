@@ -10,12 +10,8 @@ void dfs(int &u)
     cout << u << " ";
     mark[u] = 1;
     for (auto &v : store[u])
-    {
         if (!mark[v])
-        {
             dfs(v);
-        }
-    }
 }
 int main()
 {
