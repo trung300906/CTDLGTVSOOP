@@ -6,6 +6,7 @@ class Kruskal
 private:
     vectot<vector<int>> maps;
     int node;
+    vector<pair<int, pair<int, int>>> dsu;
 
 public:
     Kruskal()
@@ -26,6 +27,7 @@ public:
             maps.push_back(temp);
         }
     }
+    void
 };
 int main()
 {
