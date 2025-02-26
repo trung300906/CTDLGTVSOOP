@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #include "numpy.hpp"
-#include "function.hpp"
+// #include "linear_regression.hpp"
 using namespace std;
 
 int main()
@@ -10,6 +10,5 @@ int main()
     numpy::ndarray a(rows, collom);
     numpy::ndarray b(rows, collom);
     cin >> a;
-    cin >> b;
-    cout << a * 2;
+    cout << a[0][1] << endl;
 }

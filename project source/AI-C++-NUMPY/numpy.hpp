@@ -5,23 +5,25 @@
 #include <math.h>
 
 /*
-+ for matrix addition
-* with scalor for matrix sub with scalor
-* with matrix for matrix multiplication
-/ for matrix division with scalor
-- for matrix addstract
-transpose() for transpose matrix
-element_wise_power() for element wise power
-element_wise_multiplication() for element wise multiplication
-element_wise_division() for element wise division
-sum_all_elements() for sum all elements in matrix
-trace() for trace of matrix
-reshape_matrix() for reshape matrix
-rank() for rank of matrix
-inverse_matrix() for inverse matrix
-size_matrix() for size of matrix
-determinant() for determinant of matrix
-kronecker_product() for kronecker product of matrix
+    // index
+    + for matrix addition
+    * with scalor for matrix sub with scalor
+    * with matrix for matrix multiplication
+    / for matrix division with scalor
+    - for matrix addstract
+    transpose() for transpose matrix
+    power() for element wise power
+    element_wise_multiplication() for element wise multiplication
+    element_wise_division() for element wise division
+    sum_all_elements() for sum all elements in matrix
+    trace() for trace of matrix
+    reshape_matrix() for reshape matrix
+    rank() for rank of matrix
+    inverse_matrix() for inverse matrix
+    size_matrix() for size of matrix(rows * collom)
+    deter() for determinant of matrix
+    kronecker_product() for kronecker product of matrix
+
 */
 namespace numpy
 {
@@ -34,6 +36,7 @@ namespace numpy
     public:
         ndarray(const size_t &r, const size_t &c) : collom(c), rows(r), data(r, std::vector<double>(c, 0)) {};
         ndarray(const std::vector<std::vector<double>> &d) : data(d), rows(d.size()), collom(d[0].size()) {};
+        // use getter and setter for access data in private field
 
         // for print matrix
         friend std::ostream &operator<<(std::ostream &os, const ndarray &nd)
@@ -56,6 +59,12 @@ namespace numpy
                 }
             }
             return is;
+        }
+        std::vector<double> &operator[](const int &index)
+        {
+            if (index >= rows)
+                throw std::runtime_error("index out of range");
+            return data[index];
         }
         ndarray operator=(const ndarray &nd)
         {
@@ -145,7 +154,6 @@ namespace numpy
                         }
                     }
                 }
-
                 return answer;
             }
         }
@@ -161,7 +169,7 @@ namespace numpy
             }
             return answer;
         }
-        ndarray element_wise_power(const double &exponent)
+        ndarray power(const double &exponent)
         {
             ndarray answer(rows, collom);
             for (int i = 0; i < rows; i++)
@@ -327,41 +335,47 @@ namespace numpy
             }
             return inverse_matrix;
         }
-        double size_matrix()
+
+        // 0 for get rows and 1 for get collom
+        double size_matrix() const
         {
-            return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+            return rows * collom;
         }
-        double determinant(const std::vector<std::vector<double>> &A)
+
+        double deter() const
         {
-            int n = A.size();
-            for (const auto &row : A)
+            int n = data.size();
+            for (const auto &row : data)
                 if (row.size() != n)
                     throw std::runtime_error("Ma trận phải là ma trận vuông.");
 
-            if (n == 1)
-                return A[0][0];
-            if (n == 2)
-                return A[0][0] * A[1][1] - A[0][1] * A[1][0];
+            std::vector<std::vector<double>> A = data; // Sao chép để không làm thay đổi dữ liệu gốc
+            double det = 1;
 
-            double det = 0;
-            for (int p = 0; p < n; p++)
+            for (int i = 0; i < n; i++)
             {
-                std::vector<std::vector<double>> subMatrix(n - 1, std::vector<double>(n - 1));
-                for (int i = 1; i < n; i++)
+                int pivot = i;
+                while (pivot < n && A[pivot][i] == 0)
+                    pivot++;
+                if (pivot == n)
+                    return 0;
+
+                if (pivot != i)
                 {
-                    int sub_j = 0;
-                    for (int j = 0; j < n; j++)
-                    {
-                        if (j == p)
-                            continue;
-                        subMatrix[i - 1][sub_j] = A[i][j];
-                        sub_j++;
-                    }
+                    std::swap(A[i], A[pivot]);
+                    det = -det;
                 }
-                det += A[0][p] * pow(-1, p) * determinant(subMatrix);
+
+                det *= A[i][i];
+                for (int j = i + 1; j < n; j++)
+                    A[i][j] /= A[i][i];
+                for (int j = i + 1; j < n; j++)
+                    for (int k = i + 1; k < n; k++)
+                        A[j][k] -= A[j][i] * A[i][k];
             }
             return det;
         }
+
         ndarray kronecker_product(const ndarray &nd)
         {
             size_t m = rows;
