@@ -49,6 +49,10 @@ public:
     {
         print_protected();
     }
+    void using_private_method_myclass()
+    {
+        print_private();
+    }
 };
 int main()
 {
@@ -61,4 +65,5 @@ int main()
     obj.using_protected_method();
     myclass_child obj2;
     obj2.using_protected_method_myclass();
+    obj2.using_private_method_myclass();
 }
