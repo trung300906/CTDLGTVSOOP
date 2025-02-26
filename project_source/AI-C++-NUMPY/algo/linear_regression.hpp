@@ -94,7 +94,7 @@ numpy::ndarray compute_cost_vector(numpy::ndarray &X, numpy::ndarray &y, numpy::
     return (error.transpose() * error) * (1 / (2 * m));
 }
 
-#if 1
+#if 0
 tuple_matrix gradient_descent(numpy::ndarray &X, numpy::ndarray &y, numpy::ndarray &theta, const double &learning_rate, const int &iterations)
 {
     int m = y.size_matrix();
