@@ -189,7 +189,7 @@ namespace numpy
         else
         {
             ndarray answer(a.rows, b.collom);
-            for (int i = 0; i < a.rows; i++)
+            for (int i = 0; i < a.rows; i++)s
             {
                 for (int j = 0; j < b.collom; j++)
                 {
