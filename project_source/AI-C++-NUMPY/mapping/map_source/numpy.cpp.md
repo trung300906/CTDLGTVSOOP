@@ -1,3 +1,4 @@
+```cpp
 #include "numpy.hpp"
 #include <iostream>
 #include <vector>
@@ -7,13 +8,12 @@
 
 namespace numpy
 {
-    template <typename data_type>
     ndarray ndarray::transpose()
     {
         ndarray answer(collom, rows);
-        for (size_t i = 0; i < rows; i++)
+        for (int i = 0; i < rows; i++)
         {
-            for (size_t j = 0; j < collom; j++)
+            for (int j = 0; j < collom; j++)
             {
                 answer.data[j][i] = data[i][j];
             }
@@ -23,9 +23,9 @@ namespace numpy
     ndarray ndarray::power(const double &exponent)
     {
         ndarray answer(rows, collom);
-        for (size_t i = 0; i < rows; i++)
+        for (int i = 0; i < rows; i++)
         {
-            for (size_t j = 0; j < collom; j++)
+            for (int j = 0; j < collom; j++)
             {
                 answer.data[i][j] = pow(data[i][j], exponent);
             }
@@ -41,9 +41,9 @@ namespace numpy
         else
         {
             ndarray answer(rows, collom);
-            for (size_t i = 0; i < rows; i++)
+            for (int i = 0; i < rows; i++)
             {
-                for (size_t j = 0; j < collom; j++)
+                for (int j = 0; j < collom; j++)
                 {
                     answer.data[i][j] = data[i][j] * nd.data[i][j];
                 }
@@ -60,9 +60,9 @@ namespace numpy
         else
         {
             ndarray answer(rows, collom);
-            for (size_t i = 0; i < rows; i++)
+            for (int i = 0; i < rows; i++)
             {
-                for (size_t j = 0; j < collom; j++)
+                for (int j = 0; j < collom; j++)
                 {
                     if (nd.data[i][j] == 0)
                         throw std::runtime_error("division by zero");
@@ -98,9 +98,9 @@ namespace numpy
             flat.insert(flat.end(), data[i].begin(), data[i].end());
         ndarray result(new_rows, new_collom);
         int index = 0;
-        for (size_t i = 0; i < new_rows; i++)
+        for (int i = 0; i < new_rows; i++)
         {
-            for (size_t j = 0; j < new_collom; j++)
+            for (int j = 0; j < new_collom; j++)
             {
                 result.data[i][j] = flat[index++];
             }
@@ -110,10 +110,10 @@ namespace numpy
     int ndarray::rank()
     {
         int rank = 0;
-        for (size_t i = 0; i < rows; i++)
+        for (int i = 0; i < rows; i++)
         {
             bool non_zero = false;
-            for (size_t j = 0; j < collom; j++)
+            for (int j = 0; j < collom; j++)
             {
                 if (data[i][j] != 0)
                 {
@@ -137,15 +137,15 @@ namespace numpy
             }
         }
         std::vector<std::vector<double>> augmented_matrix(n, std::vector<double>(2 * n, 0));
-        for (size_t i = 0; i < n; i++)
+        for (int i = 0; i < n; i++)
         {
-            for (size_t j = 0; j < n; j++)
+            for (int j = 0; j < n; j++)
             {
                 augmented_matrix[i][j] = data[i][j];
             }
             augmented_matrix[i][i + n] = 1;
         }
-        for (size_t i = 0; i < n; i++)
+        for (int i = 0; i < n; i++)
         {
             if (augmented_matrix[i][i] == 0)
             {
@@ -154,22 +154,22 @@ namespace numpy
                     row++;
                 if (row == n)
                     throw std::runtime_error("Ma trận không khả nghịch.");
-                for (size_t j = 0; j < 2 * n; j++)
+                for (int j = 0; j < 2 * n; j++)
                 {
                     std::swap(augmented_matrix[i][j], augmented_matrix[row][j]);
                 }
             }
             double temp = augmented_matrix[i][i];
-            for (size_t j = 0; j < 2 * n; j++)
+            for (int j = 0; j < 2 * n; j++)
             {
                 augmented_matrix[i][j] /= temp;
             }
-            for (size_t j = 0; j < n; j++)
+            for (int j = 0; j < n; j++)
             {
                 if (i != j)
                 {
                     double temp = augmented_matrix[j][i];
-                    for (size_t k = 0; k < 2 * n; k++)
+                    for (int k = 0; k < 2 * n; k++)
                     {
                         augmented_matrix[j][k] -= temp * augmented_matrix[i][k];
                     }
@@ -177,9 +177,9 @@ namespace numpy
             }
         }
         std::vector<std::vector<double>> inverse_matrix(n, std::vector<double>(n, 0));
-        for (size_t i = 0; i < n; i++)
+        for (int i = 0; i < n; i++)
         {
-            for (size_t j = 0; j < n; j++)
+            for (int j = 0; j < n; j++)
             {
                 inverse_matrix[i][j] = augmented_matrix[i][j + n];
             }
@@ -261,3 +261,4 @@ namespace numpy
         return result;
     }
 }
+````

@@ -1,3 +1,4 @@
+```cpp
 #ifndef LINEAR_REGRESSION_HPP
 #define LINEAR_REGRESSION_HPP
 #include <vector>
@@ -6,7 +7,7 @@
 #include <fstream>
 #include <string>
 #include "numpy.hpp"
-#include "specs_algo.hpp"
+
 struct tuple_matrix
 {
     numpy::ndarray theta;
@@ -132,3 +133,7 @@ tuple_matrix gradient_descent(numpy::ndarray &X, numpy::ndarray &y, numpy::ndarr
 }
 #endif
 #endif
+
+````
+
+sz

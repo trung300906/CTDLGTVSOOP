@@ -10,5 +10,6 @@ int main()
     numpy::ndarray a(rows, collom);
     numpy::ndarray b(rows, collom);
     cin >> a;
-    cout << a.transpose() << endl;
+    cin >> b;
+    cout << a - b << endl;
 }

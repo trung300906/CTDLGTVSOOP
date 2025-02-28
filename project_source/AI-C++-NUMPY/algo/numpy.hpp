@@ -36,7 +36,7 @@ namespace numpy
         size_t rows, collom;
 
     public:
-        ndarray(const size_t &r, const size_t &c) : collom(c), rows(r), data(r, std::vector<data_type>(c, 0)) {};
+        ndarray(const data_type &r, const data_type &c) : collom(c), rows(r), data(r, std::vector<data_type>(c, 0)) {};
         ndarray(const std::vector<std::vector<data_type>> &d) : data(d), rows(d.size()), collom(d[0].size()) {};
         // use getter and setter for access data in private field
 
@@ -54,12 +54,8 @@ namespace numpy
         friend std::istream &operator>>(std::istream &is, ndarray &nd)
         {
             for (size_t i = 0; i < nd.rows; i++)
-            {
                 for (size_t j = 0; j < nd.collom; j++)
-                {
                     is >> nd.data[i][j];
-                }
-            }
             return is;
         }
         std::vector<data_type> &operator[](const size_t &index)
@@ -68,14 +64,14 @@ namespace numpy
                 throw std::runtime_error("index out of range");
             return data[index];
         }
-        ndarray operator=(const ndarray &nd)
+        ndarray<data_type> &operator=(const ndarray &nd)
         {
             rows = nd.rows;
             collom = nd.collom;
             data = nd.data;
             return *this;
         }
-        ndarray operator+(const ndarray &nd)
+        ndarray<data_type> operator+(const ndarray &nd)
         {
             if (rows != nd.rows && collom != nd.collom)
             {
@@ -94,7 +90,7 @@ namespace numpy
                 return answer;
             }
         }
-        ndarray operator-(const ndarray &nd)
+        ndarray<data_type> operator-(const ndarray &nd)
         {
             if (rows != nd.rows && collom != nd.collom)
             {
@@ -113,7 +109,7 @@ namespace numpy
                 return answer;
             }
         }
-        ndarray operator*(const data_type &scalor)
+        ndarray<data_type> operator*(const data_type &scalor)
         {
             ndarray answer(rows, collom);
             for (size_t i = 0; i < rows; i++)
@@ -125,7 +121,7 @@ namespace numpy
             }
             return answer;
         }
-        ndarray operator/(const data_type &scalor)
+        ndarray<data_type> operator/(const data_type &scalor)
         {
             ndarray answer(rows, collom);
             for (size_t i = 0; i < rows; i++)
@@ -137,7 +133,7 @@ namespace numpy
             }
             return answer;
         }
-        ndarray operator*(const ndarray &nd)
+        ndarray<data_type> operator*(const ndarray &nd)
         {
             if (collom != nd.rows)
             {
@@ -177,32 +173,14 @@ namespace numpy
         ndarray<data_type> kronecker_product(const ndarray<data_type> &nd);
         // specs_algo in file specs_algo.hpp
     };
+    /*
+        template <typename T>
+        ndarray(T, T) -> ndarray<T>;
 
-#if 0
-#define MATMUL @
-    ndarray operator MATMUL(const ndarray &a, const ndarray &b)
-    {
-        if (a.collom !-b.rows)
-        {
-            throw std::runtime_error("dimension error...");
-        }
-        else
-        {
-            ndarray answer(a.rows, b.collom);
-            for (int i = 0; i < a.rows; i++)s
-            {
-                for (int j = 0; j < b.collom; j++)
-                {
-                    for (int k = 0; k < a.collom; k++)
-                    {
-                        answer.data[i][j] += a.data[i][k] * b.data[k][j];
-                    }
-                }
-            }
-            return answer;
-        }
-    }
-#endif
+        template <typename T>
+        ndarray(const std::vector<std::vector<T>> &) -> ndarray<T>;
+    */
+
 }
 
 #endif
