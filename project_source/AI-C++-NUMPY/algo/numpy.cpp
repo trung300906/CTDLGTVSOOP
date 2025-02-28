@@ -8,9 +8,9 @@
 namespace numpy
 {
     template <typename data_type>
-    ndarray ndarray::transpose()
+    ndarray<data_type> ndarray<data_type>::transpose()
     {
-        ndarray answer(collom, rows);
+        ndarray<data_type> answer(collom, rows);
         for (size_t i = 0; i < rows; i++)
         {
             for (size_t j = 0; j < collom; j++)
@@ -20,9 +20,11 @@ namespace numpy
         }
         return answer;
     }
-    ndarray ndarray::power(const double &exponent)
+
+    template <typename data_type>
+    ndarray<data_type> ndarray<data_type>::power(const double &exponent)
     {
-        ndarray answer(rows, collom);
+        ndarray<data_type> answer(rows, collom);
         for (size_t i = 0; i < rows; i++)
         {
             for (size_t j = 0; j < collom; j++)
@@ -32,15 +34,17 @@ namespace numpy
         }
         return answer;
     }
-    ndarray ndarray::element_wise_multiplication(const ndarray &nd)
+
+    template <typename data_type>
+    ndarray<data_type> ndarray<data_type>::element_wise_multiplication(const ndarray<data_type> &nd)
     {
-        if (rows != nd.rows && collom != nd.collom)
+        if (rows != nd.rows || collom != nd.collom)
         {
             throw std::runtime_error("dimension error");
         }
         else
         {
-            ndarray answer(rows, collom);
+            ndarray<data_type> answer(rows, collom);
             for (size_t i = 0; i < rows; i++)
             {
                 for (size_t j = 0; j < collom; j++)
@@ -51,7 +55,9 @@ namespace numpy
             return answer;
         }
     }
-    ndarray ndarray::element_wise_division(const ndarray &nd)
+
+    template <typename data_type>
+    ndarray<data_type> ndarray<data_type>::element_wise_division(const ndarray<data_type> &nd)
     {
         if (rows != nd.rows && collom != nd.collom)
         {
@@ -59,7 +65,7 @@ namespace numpy
         }
         else
         {
-            ndarray answer(rows, collom);
+            ndarray<data_type> answer(rows, collom);
             for (size_t i = 0; i < rows; i++)
             {
                 for (size_t j = 0; j < collom; j++)
@@ -72,12 +78,16 @@ namespace numpy
             return answer;
         }
     }
-    double ndarray::sum_all_elements() const
+
+    template <typename data_type>
+    double ndarray<data_type>::sum_all_elements() const
     {
-        return std::accumulate(data.begin(), data.end(), 0.0, [](double sum, const std::vector<double> &row)
+        return std::accumulate(data.begin(), data.end(), 0.0, [](double sum, const std::vector<data_type> &row)
                                { return sum + std::accumulate(row.begin(), row.end(), 0.0); });
     }
-    double ndarray::trace()
+
+    template <typename data_type>
+    double ndarray<data_type>::trace()
     {
         if (rows != collom)
             throw std::runtime_error("Ma trận phải là ma trận vuông.");
@@ -88,7 +98,9 @@ namespace numpy
         }
         return tr;
     }
-    ndarray ndarray::reshape_matrix(const size_t &new_rows, const size_t &new_collom)
+
+    template <typename data_type>
+    ndarray<data_type> ndarray<data_type>::reshape_matrix(const size_t &new_rows, const size_t &new_collom)
     {
         size_t total_elements = rows * collom;
         if (new_rows * new_collom != total_elements)
@@ -96,7 +108,7 @@ namespace numpy
         std::vector<double> flat;
         for (int i = 0; i < rows; i++)
             flat.insert(flat.end(), data[i].begin(), data[i].end());
-        ndarray result(new_rows, new_collom);
+        ndarray<data_type> result(new_rows, new_collom);
         int index = 0;
         for (size_t i = 0; i < new_rows; i++)
         {
@@ -107,7 +119,9 @@ namespace numpy
         }
         return result;
     }
-    int ndarray::rank()
+
+    template <typename data_type>
+    int ndarray<data_type>::rank()
     {
         int rank = 0;
         for (size_t i = 0; i < rows; i++)
@@ -126,7 +140,9 @@ namespace numpy
         }
         return rank;
     }
-    ndarray ndarray::inverse_matrix()
+
+    template <typename data_type>
+    ndarray<data_type> ndarray<data_type>::inverse_matrix()
     {
         int n = rows;
         for (const auto &row : data)
@@ -136,7 +152,7 @@ namespace numpy
                 throw std::runtime_error("Ma trận phải là ma trận vuông.");
             }
         }
-        std::vector<std::vector<double>> augmented_matrix(n, std::vector<double>(2 * n, 0));
+        std::vector<std::vector<data_type>> augmented_matrix(n, std::vector<data_type>(2 * n, 0));
         for (size_t i = 0; i < n; i++)
         {
             for (size_t j = 0; j < n; j++)
@@ -176,7 +192,7 @@ namespace numpy
                 }
             }
         }
-        std::vector<std::vector<double>> inverse_matrix(n, std::vector<double>(n, 0));
+        std::vector<std::vector<data_type>> inverse_matrix(n, std::vector<data_type>(n, 0));
         for (size_t i = 0; i < n; i++)
         {
             for (size_t j = 0; j < n; j++)
@@ -186,11 +202,15 @@ namespace numpy
         }
         return inverse_matrix;
     }
-    double ndarray::size_matrix() const
+
+    template <typename data_type>
+    data_type ndarray<data_type>::size_matrix() const
     {
         return rows * collom;
     }
-    double ndarray::size_matrix(const double &dimension_Choice) const
+
+    template <typename data_type>
+    data_type ndarray<data_type>::size_matrix(const bool &dimension_Choice) const
     {
         if (dimension_Choice == 0)
         {
@@ -205,19 +225,21 @@ namespace numpy
             throw std::runtime_error("dimension error");
         }
     }
-    double ndarray::deter() const
+
+    template <typename data_type>
+    data_type ndarray<data_type>::deter() const
     {
-        int n = data.size();
+        size_t n = data.size();
         for (const auto &row : data)
             if (row.size() != n)
                 throw std::runtime_error("Ma trận phải là ma trận vuông.");
 
-        std::vector<std::vector<double>> A = data; // Sao chép để không làm thay đổi dữ liệu gốc
+        std::vector<std::vector<data_type>> A = data; // Sao chép để không làm thay đổi dữ liệu gốc
         double det = 1;
 
-        for (int i = 0; i < n; i++)
+        for (size_t i = 0; i < n; i++)
         {
-            int pivot = i;
+            size_t pivot = i;
             while (pivot < n && A[pivot][i] == 0)
                 pivot++;
             if (pivot == n)
@@ -230,28 +252,30 @@ namespace numpy
             }
 
             det *= A[i][i];
-            for (int j = i + 1; j < n; j++)
+            for (size_t j = i + 1; j < n; j++)
                 A[i][j] /= A[i][i];
-            for (int j = i + 1; j < n; j++)
-                for (int k = i + 1; k < n; k++)
+            for (size_t j = i + 1; j < n; j++)
+                for (size_t k = i + 1; k < n; k++)
                     A[j][k] -= A[j][i] * A[i][k];
         }
         return det;
     }
-    ndarray ndarray::kronecker_product(const ndarray &nd)
+
+    template <typename data_type>
+    ndarray<data_type> ndarray<data_type>::kronecker_product(const ndarray<data_type> &nd)
     {
         size_t m = rows;
         size_t n = collom;
         size_t p = nd.rows;
         size_t q = nd.collom;
         ndarray result(m * p, n * q);
-        for (int i = 0; i < m; i++)
+        for (size_t i = 0; i < m; i++)
         {
-            for (int j = 0; j < n; j++)
+            for (size_t j = 0; j < n; j++)
             {
-                for (int k = 0; k < p; k++)
+                for (size_t k = 0; k < p; k++)
                 {
-                    for (int l = 0; l < q; l++)
+                    for (size_t l = 0; l < q; l++)
                     {
                         result.data[i * p + k][j * q + l] = data[i][j] * nd.data[k][l];
                     }
