@@ -28,15 +28,16 @@
 */
 namespace numpy
 {
+    template <typename data_type>
     class ndarray
     {
     private:
-        std::vector<std::vector<double>> data;
+        std::vector<std::vector<data_type>> data;
         size_t rows, collom;
 
     public:
-        ndarray(const size_t &r, const size_t &c) : collom(c), rows(r), data(r, std::vector<double>(c, 0)) {};
-        ndarray(const std::vector<std::vector<double>> &d) : data(d), rows(d.size()), collom(d[0].size()) {};
+        ndarray(const size_t &r, const size_t &c) : collom(c), rows(r), data(r, std::vector<data_type>(c, 0)) {};
+        ndarray(const std::vector<std::vector<data_type>> &d) : data(d), rows(d.size()), collom(d[0].size()) {};
         // use getter and setter for access data in private field
 
         // for operator overloading
@@ -46,22 +47,22 @@ namespace numpy
             {
                 for (auto &j : i)
                     os << j << " ";
-                os << std::endl;
+                os << "\n";
             }
             return os;
         }
         friend std::istream &operator>>(std::istream &is, ndarray &nd)
         {
-            for (int i = 0; i < nd.rows; i++)
+            for (size_t i = 0; i < nd.rows; i++)
             {
-                for (int j = 0; j < nd.collom; j++)
+                for (size_t j = 0; j < nd.collom; j++)
                 {
                     is >> nd.data[i][j];
                 }
             }
             return is;
         }
-        std::vector<double> &operator[](const int &index)
+        std::vector<data_type> &operator[](const size_t &index)
         {
             if (index >= rows)
                 throw std::runtime_error("index out of range");
@@ -83,9 +84,9 @@ namespace numpy
             else
             {
                 ndarray answer(rows, collom);
-                for (int i = 0; i < rows; i++)
+                for (size_t i = 0; i < rows; i++)
                 {
-                    for (int j = 0; j < collom; j++)
+                    for (size_t j = 0; j < collom; j++)
                     {
                         answer.data[i][j] += data[i][j] + nd.data[i][j];
                     }
@@ -102,9 +103,9 @@ namespace numpy
             else
             {
                 ndarray answer(rows, collom);
-                for (int i = 0; i < rows; i++)
+                for (size_t i = 0; i < rows; i++)
                 {
-                    for (int j = 0; j < collom; j++)
+                    for (size_t j = 0; j < collom; j++)
                     {
                         answer.data[i][j] += data[i][j] - nd.data[i][j];
                     }
@@ -112,24 +113,24 @@ namespace numpy
                 return answer;
             }
         }
-        ndarray operator*(const double &scalor)
+        ndarray operator*(const data_type &scalor)
         {
             ndarray answer(rows, collom);
-            for (int i = 0; i < rows; i++)
+            for (size_t i = 0; i < rows; i++)
             {
-                for (int j = 0; j < collom; j++)
+                for (size_t j = 0; j < collom; j++)
                 {
                     answer.data[i][j] += data[i][j] * scalor;
                 }
             }
             return answer;
         }
-        ndarray operator/(const double &scalor)
+        ndarray operator/(const data_type &scalor)
         {
             ndarray answer(rows, collom);
-            for (int i = 0; i < rows; i++)
+            for (size_t i = 0; i < rows; i++)
             {
-                for (int j = 0; j < collom; j++)
+                for (size_t j = 0; j < collom; j++)
                 {
                     answer.data[i][j] += data[i][j] / scalor;
                 }
@@ -145,11 +146,11 @@ namespace numpy
             else
             {
                 ndarray answer(rows, nd.collom);
-                for (int i = 0; i < rows; i++)
+                for (size_t i = 0; i < rows; i++)
                 {
-                    for (int j = 0; j < nd.collom; j++)
+                    for (size_t j = 0; j < nd.collom; j++)
                     {
-                        for (int k = 0; k < collom; k++)
+                        for (size_t k = 0; k < collom; k++)
                         {
                             answer.data[i][j] += data[i][k] * nd.data[k][j];
                         }
@@ -160,20 +161,20 @@ namespace numpy
         }
 
         // hearder function
-        ndarray transpose();
-        ndarray power(const double &exponent);
-        ndarray element_wise_multiplication(const ndarray &nd);
-        ndarray element_wise_division(const ndarray &nd);
-        double sum_all_elements() const;
-        double trace();
-        ndarray reshape_matrix(const size_t &new_rows, const size_t &new_collom);
+        ndarray<data_type> transpose();
+        ndarray<data_type> power(const data_type &exponent);
+        ndarray<data_type> element_wise_multiplication(const ndarray<data_type> &nd);
+        ndarray<data_type> element_wise_division(const ndarray<data_type> &nd);
+        data_type sum_all_elements() const;
+        data_type trace();
+        ndarray<data_type> reshape_matrix(const size_t &new_rows, const size_t &new_collom);
         int rank();
-        ndarray inverse_matrix();
-        double size_matrix() const;
+        ndarray<data_type> inverse_matrix();
+        data_type size_matrix() const;
         // 0 for get rows and 1 for get collom
-        double size_matrix(const double &dimension_choice) const;
-        double deter() const;
-        ndarray kronecker_product(const ndarray &nd);
+        data_type size_matrix(const bool &dimension_choice) const;
+        data_type deter() const;
+        ndarray<data_type> kronecker_product(const ndarray<data_type> &nd);
         // specs_algo in file specs_algo.hpp
     };
 
