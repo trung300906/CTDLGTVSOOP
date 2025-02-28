@@ -9,5 +9,6 @@ int main()
     cin >> rows >> collom;
     numpy::ndarray a(rows, collom);
     numpy::ndarray b(rows, collom);
+    cin >> a;
     cout << a.transpose() << endl;
 }

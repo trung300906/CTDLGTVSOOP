@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <numeric>
 #include <math.h>
 
 namespace numpy
@@ -187,6 +188,21 @@ namespace numpy
     double ndarray::size_matrix() const
     {
         return rows * collom;
+    }
+    double ndarray::size_matrix(const double &dimension_Choice) const
+    {
+        if (dimension_Choice == 0)
+        {
+            return rows;
+        }
+        else if (dimension_Choice == 1)
+        {
+            return collom;
+        }
+        else
+        {
+            throw std::runtime_error("dimension error");
+        }
     }
     double ndarray::deter() const
     {

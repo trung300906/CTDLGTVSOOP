@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <math.h>
+#include <numeric>
 
 /*
     // index
@@ -38,7 +39,7 @@ namespace numpy
         ndarray(const std::vector<std::vector<double>> &d) : data(d), rows(d.size()), collom(d[0].size()) {};
         // use getter and setter for access data in private field
 
-        // for print matrix
+        // for operator overloading
         friend std::ostream &operator<<(std::ostream &os, const ndarray &nd)
         {
             for (auto &i : nd.data)
@@ -168,10 +169,12 @@ namespace numpy
         ndarray reshape_matrix(const size_t &new_rows, const size_t &new_collom);
         int rank();
         ndarray inverse_matrix();
-        // 0 for get rows and 1 for get collom
         double size_matrix() const;
+        // 0 for get rows and 1 for get collom
+        double size_matrix(const double &dimension_choice) const;
         double deter() const;
         ndarray kronecker_product(const ndarray &nd);
+        // specs_algo in file specs_algo.hpp
     };
 
 #if 0
