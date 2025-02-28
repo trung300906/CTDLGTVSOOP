@@ -1,0 +1,188 @@
+{
+  "main": {
+    "id": "a847976f17ef18e7",
+    "type": "split",
+    "children": [
+      {
+        "id": "a4b45f01eea87e49",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "010da768ebe4f0be",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "NUMPY.HPP.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "NUMPY.HPP"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "307c10b7190b0bbe",
+    "type": "split",
+    "children": [
+      {
+        "id": "726aa5ec8e61acc6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "00611b7b09b9c9bb",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "7a34c8daf280c381",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "c812ca5284e6f1d1",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "a833393d4f0183f3",
+    "type": "split",
+    "children": [
+      {
+        "id": "135b3e444f32cbca",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a7471b1de49387a8",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "NUMPY.HPP.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for NUMPY.HPP"
+            }
+          },
+          {
+            "id": "e67a2a57ddc172af",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "NUMPY.HPP.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from NUMPY.HPP"
+            }
+          },
+          {
+            "id": "eba2e546255a7443",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "971a05a5df9c1821",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "NUMPY.HPP.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of NUMPY.HPP"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "010da768ebe4f0be",
+  "lastOpenFiles": [
+    "NUMPY.HPP.md",
+    "run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source/AI-C++-NUMPY/algo/numpy.cpp.md",
+    "run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source/AI-C++-NUMPY/algo",
+    "run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source/AI-C++-NUMPY",
+    "run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source",
+    "run/media/trung/hdddrive/CODE/CTDLGTVSOOP",
+    "run/media/trung/hdddrive/CODE",
+    "run/media/trung/hdddrive",
+    "run/media/trung",
+    "run/media",
+    "run",
+    "numpy.cpp.md",
+    "Untitled",
+    "Welcome.md"
+  ]
+}
