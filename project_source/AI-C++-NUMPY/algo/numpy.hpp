@@ -41,7 +41,7 @@ namespace numpy
         // use getter and setter for access data in private field
 
         // for operator overloading
-        friend std::ostream &operator<<(std::ostream &os, const ndarray &nd)
+        friend std::ostream &operator<<(std::ostream &os, const ndarray<data_type> &nd)
         {
             for (auto &i : nd.data)
             {
@@ -51,7 +51,7 @@ namespace numpy
             }
             return os;
         }
-        friend std::istream &operator>>(std::istream &is, ndarray &nd)
+        friend std::istream &operator>>(std::istream &is, ndarray<data_type> &nd)
         {
             for (size_t i = 0; i < nd.rows; i++)
                 for (size_t j = 0; j < nd.collom; j++)
@@ -64,14 +64,14 @@ namespace numpy
                 throw std::runtime_error("index out of range");
             return data[index];
         }
-        ndarray<data_type> &operator=(const ndarray &nd)
+        ndarray<data_type> &operator=(const ndarray<data_type> &nd)
         {
             rows = nd.rows;
             collom = nd.collom;
             data = nd.data;
             return *this;
         }
-        ndarray<data_type> operator+(const ndarray &nd)
+        ndarray<data_type> operator+(const ndarray<data_type> &nd)
         {
             if (rows != nd.rows && collom != nd.collom)
             {
@@ -90,7 +90,7 @@ namespace numpy
                 return answer;
             }
         }
-        ndarray<data_type> operator-(const ndarray &nd)
+        ndarray<data_type> operator-(const ndarray<data_type> &nd)
         {
             if (rows != nd.rows && collom != nd.collom)
             {

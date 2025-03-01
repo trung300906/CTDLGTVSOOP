@@ -1,0 +1,2 @@
+s, collom;
+    cout <<

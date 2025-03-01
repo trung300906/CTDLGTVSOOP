@@ -7,6 +7,15 @@
 
 namespace numpy
 {
+    // Explicit instantiation cho các kiểu cần dùng:
+    template class ndarray<int>;
+    template class ndarray<double>;
+    template class ndarray<float>;
+    template class ndarray<long>;
+    template class ndarray<long long>;
+    template class ndarray<unsigned>;
+    template class ndarray<unsigned long>;
+    template class ndarray<unsigned long long>; // C++11
     template <typename data_type>
     ndarray<data_type> ndarray<data_type>::transpose()
     {
@@ -21,16 +30,21 @@ namespace numpy
         return answer;
     }
 
+#if 0
     template <typename data_type>
     ndarray<data_type> ndarray<data_type>::power(const double &exponent)
     {
+        if (rows == 0 || collom == 0)
+        {
+            throw std::runtime_error("Cannot apply power to an empty matrix.");
+        }
+
         ndarray<data_type> answer(rows, collom);
         for (size_t i = 0; i < rows; i++)
         {
-            for (size_t j = 0; j < collom; j++)
-            {
-                answer.data[i][j] = pow(data[i][j], exponent);
-            }
+            std::transform(data[i].begin(), data[i].end(), answer.data[i].begin(),
+                           [exponent](data_type x)
+                           { return std::pow(x, exponent); });
         }
         return answer;
     }
@@ -284,4 +298,6 @@ namespace numpy
         }
         return result;
     }
+#endif
+
 }
