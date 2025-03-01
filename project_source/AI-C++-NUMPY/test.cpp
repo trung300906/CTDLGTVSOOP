@@ -12,5 +12,5 @@ int main()
     numpy::ndarray b(rows, collom);
     cin >> a;
     cin >> b;
-    cout << a.transpose() << endl;
+    cout << (a + b).transpose() << endl;
 }

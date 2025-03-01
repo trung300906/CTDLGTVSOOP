@@ -1,4 +1,6 @@
 #include "numpy.hpp"
+#include <algorithm>
+#include <stdexcept>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -16,6 +18,7 @@ namespace numpy
     template class ndarray<unsigned>;
     template class ndarray<unsigned long>;
     template class ndarray<unsigned long long>; // C++11
+
     template <typename data_type>
     ndarray<data_type> ndarray<data_type>::transpose()
     {
@@ -30,9 +33,8 @@ namespace numpy
         return answer;
     }
 
-#if 0
     template <typename data_type>
-    ndarray<data_type> ndarray<data_type>::power(const double &exponent)
+    ndarray<data_type> ndarray<data_type>::power(const data_type &exponent)
     {
         if (rows == 0 || collom == 0)
         {
@@ -42,8 +44,7 @@ namespace numpy
         ndarray<data_type> answer(rows, collom);
         for (size_t i = 0; i < rows; i++)
         {
-            std::transform(data[i].begin(), data[i].end(), answer.data[i].begin(),
-                           [exponent](data_type x)
+            std::transform(data[i].begin(), data[i].end(), answer.data[i].begin(), [exponent](data_type x)
                            { return std::pow(x, exponent); });
         }
         return answer;
@@ -94,14 +95,14 @@ namespace numpy
     }
 
     template <typename data_type>
-    double ndarray<data_type>::sum_all_elements() const
+    data_type ndarray<data_type>::sum_all_elements() const
     {
         return std::accumulate(data.begin(), data.end(), 0.0, [](double sum, const std::vector<data_type> &row)
                                { return sum + std::accumulate(row.begin(), row.end(), 0.0); });
     }
 
     template <typename data_type>
-    double ndarray<data_type>::trace()
+    data_type ndarray<data_type>::trace()
     {
         if (rows != collom)
             throw std::runtime_error("Ma trận phải là ma trận vuông.");
@@ -298,6 +299,5 @@ namespace numpy
         }
         return result;
     }
-#endif
 
 }

@@ -1,9 +1,12 @@
 #ifndef NUMPY_HPP
 #define NUMPY_HPP
-#include <vector>
+#include <algorithm>
+#include <stdexcept>
 #include <iostream>
-#include <math.h>
+#include <vector>
+#include <string>
 #include <numeric>
+#include <math.h>
 
 /*
     // index
@@ -173,14 +176,6 @@ namespace numpy
         ndarray<data_type> kronecker_product(const ndarray<data_type> &nd);
         // specs_algo in file specs_algo.hpp
     };
-    /*
-        template <typename T>
-        ndarray(T, T) -> ndarray<T>;
-
-        template <typename T>
-        ndarray(const std::vector<std::vector<T>> &) -> ndarray<T>;
-    */
-
 }
 
 #endif
