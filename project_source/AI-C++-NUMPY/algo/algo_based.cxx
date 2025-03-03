@@ -299,5 +299,4 @@ namespace numpy
         }
         return result;
     }
-
 }

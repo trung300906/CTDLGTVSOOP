@@ -17,12 +17,15 @@ public:
     {
         cout << "=============================" << endl;
     }
+    double call_double();
 };
+double myclass_child::call_double();
 int main()
 {
     myclass_child obj;
     obj.method_func_child();
     myclass obj2;
-    obj2 = static_cast<
+    cout << obj.call_double();
 }
+
 #endif

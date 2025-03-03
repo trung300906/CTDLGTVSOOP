@@ -1,183 +1,139 @@
-#include <cmath>
-#include <stdexcept>
-#include <vector>
+#include "numpy.h"
 #include "specs_algo.hpp"
-#include "numpy.hpp"
+#include <iostream>
+#include <vector>
+#include <string>
+#include <numeric>
+#include <math.h>
+#include <algorithm>
+#include <stdexcept>
 
-/// LET ME DIE PLEASE ;;;;;;
 namespace numpy
 {
-
-    // Explicit instantiation cho các kiểu cần dùng:
-    template class ndarray<int>;
-    template class ndarray<double>;
-    template class ndarray<float>;
-    template class ndarray<long>;
-    template class ndarray<long long>;
-    template class ndarray<unsigned>;
-    template class ndarray<unsigned long>;
-    template class ndarray<unsigned long long>; // C++11
-    // Hàm tính trung bình, phương sai, độ lệch chuẩn, chuẩn hóa,
-    // ma trận hiệp phương sai và ma trận tương quan đã có sẵn.
     template <typename data_type>
-    double ndarray<data_type>::mean()
+    double specs_algo<data_type>::mean()
     {
         double sum = 0;
-        for (int i = 0; i < rows; i++)
+        for (size_t i = 0; i < rows; i++)
         {
-            for (int j = 0; j < collom; j++)
+            for (size_t j = 0; j < collom; j++)
             {
                 sum += data[i][j];
             }
         }
-        return sum / size_matrix();
+        return sum / (rows * collom);
     }
-
     template <typename data_type>
-    double ndarray<data_type>::variance()
+    double specs_algo<data_type>::variance()
     {
-        double m = this->mean();
+        double mean = this->mean();
         double sum = 0;
-        for (int i = 0; i < rows; i++)
+        for (size_t i = 0; i < rows; i++)
         {
-            for (int j = 0; j < collom; j++)
+            for (size_t j = 0; j < collom; j++)
             {
-                sum += (data[i][j] - m) * (data[i][j] - m);
+                sum += std::pow(data[i][j] - mean, 2);
             }
         }
-        return sum / size_matrix();
+        return sum / (rows * collom);
     }
 
     template <typename data_type>
-    double ndarray<data_type>::standard_deviation()
+    double specs_algo<data_type>::standard_deviation()
     {
-        return std::sqrt(variance());
+        return std::sqrt(this->variance());
     }
 
     template <typename data_type>
-    ndarray<data_type> ndarray<data_type>::normalize()
+    ndarray<data_type> specs_algo<data_type>::normalize()
     {
-        double m = this->mean();
-        double std = standard_deviation();
+        double mean = this->mean();
+        double std = this->standard_deviation();
         ndarray<data_type> answer(rows, collom);
-        for (int i = 0; i < rows; i++)
+        for (size_t i = 0; i < rows; i++)
         {
-            for (int j = 0; j < collom; j++)
+            for (size_t j = 0; j < collom; j++)
             {
-                answer.data[i][j] = (data[i][j] - m) / std;
+                answer.data[i][j] = (data[i][j] - mean) / std;
             }
         }
         return answer;
     }
 
     template <typename data_type>
-    ndarray<data_type> ndarray<data_type>::covariance_matrix()
+    ndarray<data_type> specs_algo<data_type>::covariance_matrix()
     {
-        ndarray<data_type> normalized = normalize();
-        ndarray<data_type> transposed = normalized.transpose(); // Giả sử transpose() đã được định nghĩa.
-        ndarray<data_type> answer(collom, collom);
-        // Khởi tạo answer về 0
-        for (int i = 0; i < collom; i++)
-        {
-            for (int j = 0; j < collom; j++)
-            {
-                answer.data[i][j] = 0;
-            }
-        }
-        for (int i = 0; i < collom; i++)
-        {
-            for (int j = 0; j < collom; j++)
-            {
-                for (int k = 0; k < rows; k++)
-                {
-                    answer.data[i][j] += transposed.data[i][k] * normalized.data[k][j];
-                }
-                answer.data[i][j] /= rows;
-            }
-        }
-        return answer;
+        ndarray<data_type> normalized_data = this->normalize();
+        ndarray<data_type> transposed_data = normalized_data.transpose();
+        return normalized_data * transposed_data;
     }
 
     template <typename data_type>
-    ndarray<data_type> ndarray<data_type>::correlation_matrix()
+    ndarray<data_type> specs_algo<data_type>::correlation_matrix()
     {
-        ndarray<data_type> normalized = normalize();
-        ndarray<data_type> answer(collom, collom);
-        // Khởi tạo answer về 0
-        for (int i = 0; i < collom; i++)
+        ndarray<data_type> normalized_data = this->normalize();
+        ndarray<data_type> transposed_data = normalized_data.transpose();
+        ndarray<data_type> covariance = normalized_data * transposed_data;
+        ndarray<data_type> std_deviation(rows, collom);
+        for (size_t i = 0; i < rows; i++)
         {
-            for (int j = 0; j < collom; j++)
+            for (size_t j = 0; j < collom; j++)
             {
-                answer.data[i][j] = 0;
+                std_deviation.data[i][j] = std::sqrt(covariance.data[i][j]);
             }
         }
-        for (int i = 0; i < collom; i++)
-        {
-            for (int j = 0; j < collom; j++)
-            {
-                for (int k = 0; k < rows; k++)
-                {
-                    answer.data[i][j] += normalized.data[k][i] * normalized.data[k][j];
-                }
-                answer.data[i][j] /= rows;
-            }
-        }
-        return answer;
+        return covariance.element_wise_division(std_deviation);
     }
 
-    //================ LU Decomposition =================
-    // Thực hiện phân tích LU theo thuật toán Doolittle và lưu trữ
-    // cả L và U trong cùng một ma trận LU:
-    // - Phần tam giác dưới (với đường chéo bằng 1) là L
-    // - Phần tam giác trên là U
     template <typename data_type>
-    ndarray<data_type> ndarray<data_type>::LU_composition()
+    ndarray<data_type> specs_algo<data_type>::LU_composition()
     {
-        if (rows != collom)
+        ndarray<data_type> L(rows, collom);
+        ndarray<data_type> U(rows, collom);
+        for (size_t i = 0; i < rows; i++)
         {
-            throw std::runtime_error("dimension error");
-        }
-        int n = rows;
-        ndarray<data_type> LU(n, n);
-        // Copy dữ liệu ban đầu vào LU
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
+            for (size_t j = 0; j < collom; j++)
             {
-                LU[i][j] = data[i][j];
-            }
-        }
-        for (int k = 0; k < n; k++)
-        {
-            // Tính U: hàng k, cột k đến n-1
-            for (int j = k; j < n; j++)
-            {
-                data_type sum = 0;
-                for (int p = 0; p < k; p++)
+                if (i > j)
                 {
-                    sum += LU[k][p] * LU[p][j];
+                    L.data[i][j] = data[i][j];
                 }
-                LU[k][j] = LU[k][j] - sum;
-            }
-            // Tính L: cột k, hàng k+1 đến n-1
-            for (int i = k + 1; i < n; i++)
-            {
-                data_type sum = 0;
-                for (int p = 0; p < k; p++)
+                else
                 {
-                    sum += LU[i][p] * LU[p][k];
-                    `
+                    U.data[i][j] = data[i][j];
                 }
-                LU[i][k] = (LU[i][k] - sum) / LU[k][k];
             }
         }
-        return LU;
+        return L * U;
     }
 
-    //================ QR Decomposition =================
-    // Phiên bản trả về ma trận Q của phân rã QR sử dụng Gram–Schmidt.
     template <typename data_type>
-    ndarray<data_type> ndarray<data_type>::QR_decomposition()
+    ndarray<data_type> specs_algo<data_type>::cholesky_decomposition()
+    {
+        ndarray<data_type> L(rows, collom);
+        for (size_t i = 0; i < rows; i++)
+        {
+            for (size_t j = 0; j < collom; j++)
+            {
+                if (i == j)
+                {
+                    data[i][j] = std::sqrt(data[i][j]);
+                }
+                else if (i > j)
+                {
+                    data[i][j] = 0;
+                }
+                else
+                {
+                    data[i][j] = data[i][j] / data[j][j];
+                }
+            }
+        }
+        return L;
+    }
+
+    template <typename data_type>
+    ndarray<data_type> specs_algo<data_type>::QR_decomposition()
     {
         if (rows != collom)
         {
@@ -223,7 +179,7 @@ namespace numpy
                 norm_v += v[k] * v[k];
             }
             norm_v = std::sqrt(norm_v);
-            R(j, j) = norm_v;
+            R[j][j] = norm_v;
             if (norm_v > 1e-6)
             {
                 for (int k = 0; k < n; k++)
@@ -239,14 +195,11 @@ namespace numpy
                 }
             }
         }
-        return Q;
+        return Q * R;
     }
 
-    //================ Eigenvalue & Eigenvector =================
-    // Sử dụng thuật toán lặp QR để tính trị riêng của ma trận vuông đối xứng.
-    // Phương pháp này cũng cho ta các vector riêng thông qua tích lũy ma trận Q.
     template <typename data_type>
-    ndarray<data_type> ndarray<data_type>::eigen_value()
+    ndarray<data_type> specs_algo<data_type>::eigen_value()
     {
         if (rows != collom)
         {
@@ -354,7 +307,7 @@ namespace numpy
     }
 
     template <typename data_type>
-    ndarray<data_type> ndarray<data_type>::eigen_vector()
+    ndarray<data_type> specs_algo<data_type>::eigen_vector()
     {
         if (rows != collom)
         {
@@ -479,12 +432,8 @@ namespace numpy
         return Q_total;
     }
 
-    //================ SVD Decomposition =================
-    // Vì SVD trả về 3 thành phần (U, S, V), ta định nghĩa cấu trúc kết quả SVDResult
-
-    // Cài đặt SVD dựa trên phân rã của A^T * A (giả sử rows >= collom)
     template <typename data_type>
-    SVDResult<data_type> SVD_decomposition(const ndarray<data_type> &A)
+    SVDResult specs_algo<data_type>::SVD_decomposition(const ndarray<data_type> &A)
     {
         if (rows < collom)
         {
@@ -559,5 +508,4 @@ namespace numpy
         result.V = V;
         return result;
     }
-
-} // namespace numpy
+}

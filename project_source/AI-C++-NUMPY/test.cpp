@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 #include "algo/numpy.hpp"
-// #include "linear_regression.hpp"
+#include "algo/specs_algo.hpp"
+//  #include "algo/linear_regression.hpp"
+//   #include "linear_regression.hpp"
 using namespace std;
 
 int main()
@@ -12,5 +14,5 @@ int main()
     numpy::ndarray b(rows, collom);
     cin >> a;
     cin >> b;
-    cout << (a + b).transpose() << endl;
+    cout << a + b << endl;
 }
