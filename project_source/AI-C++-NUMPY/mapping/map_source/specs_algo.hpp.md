@@ -34,4 +34,4 @@ namespace numpy
 #endif
 ````
 
-include into [[specs_algo.cpp]], [[linear_regression.cpp]]
+include into [[specs_algo.cpp]], [[linear_regression.hpp]], [[test.cpp]]

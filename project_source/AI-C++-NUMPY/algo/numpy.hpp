@@ -42,7 +42,16 @@ namespace numpy
         ndarray(const data_type &r, const data_type &c) : collom(c), rows(r), data(r, std::vector<data_type>(c, 0)) {};
         ndarray(const std::vector<std::vector<data_type>> &d) : data(d), rows(d.size()), collom(d[0].size()) {};
         // use getter and setter for access data in private field
-
+        ndarray<data_type> getter() const
+        {
+            return *this;
+        }
+        void setter(const ndarray<data_type> &nd)
+        {
+            rows = nd.rows;
+            collom = nd.collom;
+            data = nd.data;
+        }
         // for operator overloading
         friend std::ostream &operator<<(std::ostream &os, const ndarray<data_type> &nd)
         {

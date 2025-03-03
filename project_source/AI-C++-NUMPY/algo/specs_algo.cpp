@@ -8,6 +8,15 @@
 namespace numpy
 {
 
+    // Explicit instantiation cho các kiểu cần dùng:
+    template class ndarray<int>;
+    template class ndarray<double>;
+    template class ndarray<float>;
+    template class ndarray<long>;
+    template class ndarray<long long>;
+    template class ndarray<unsigned>;
+    template class ndarray<unsigned long>;
+    template class ndarray<unsigned long long>; // C++11
     // Hàm tính trung bình, phương sai, độ lệch chuẩn, chuẩn hóa,
     // ma trận hiệp phương sai và ma trận tương quan đã có sẵn.
     template <typename data_type>
@@ -135,7 +144,7 @@ namespace numpy
         {
             for (int j = 0; j < n; j++)
             {
-                LU(i, j) = data[i][j];
+                LU[i][j] = data[i][j];
             }
         }
         for (int k = 0; k < n; k++)
@@ -146,9 +155,9 @@ namespace numpy
                 data_type sum = 0;
                 for (int p = 0; p < k; p++)
                 {
-                    sum += LU(k, p) * LU(p, j);
+                    sum += LU[k][p] * LU[p][j];
                 }
-                LU(k, j) = LU(k, j) - sum;
+                LU[k][j] = LU[k][j] - sum;
             }
             // Tính L: cột k, hàng k+1 đến n-1
             for (int i = k + 1; i < n; i++)
@@ -156,9 +165,10 @@ namespace numpy
                 data_type sum = 0;
                 for (int p = 0; p < k; p++)
                 {
-                    sum += LU(i, p) * LU(p, k);
+                    sum += LU[i][p] * LU[p][k];
+                    `
                 }
-                LU(i, k) = (LU(i, k) - sum) / LU(k, k);
+                LU[i][k] = (LU[i][k] - sum) / LU[k][k];
             }
         }
         return LU;
@@ -182,8 +192,8 @@ namespace numpy
         {
             for (int j = 0; j < n; j++)
             {
-                Q(i, j) = 0;
-                R(i, j) = 0;
+                Q[i][j] = 0;
+                R[i][j] = 0;
             }
         }
         // Phân rã Gram-Schmidt
@@ -192,19 +202,19 @@ namespace numpy
             std::vector<data_type> v(n);
             for (int i = 0; i < n; i++)
             {
-                v[i] = A(i, j);
+                v[i] = A[i][j];
             }
             for (int i = 0; i < j; i++)
             {
                 data_type dot = 0;
                 for (int k = 0; k < n; k++)
                 {
-                    dot += Q(k, i) * A(k, j);
+                    dot += Q[k][i] * A[k][j];
                 }
-                R(i, j) = dot;
+                R[i][j] = dot;
                 for (int k = 0; k < n; k++)
                 {
-                    v[k] -= dot * Q(k, i);
+                    v[k] -= dot * Q[k][i];
                 }
             }
             data_type norm_v = 0;
@@ -218,14 +228,14 @@ namespace numpy
             {
                 for (int k = 0; k < n; k++)
                 {
-                    Q(k, j) = v[k] / norm_v;
+                    Q[k][j] = v[k] / norm_v;
                 }
             }
             else
             {
                 for (int k = 0; k < n; k++)
                 {
-                    Q(k, j) = 0;
+                    Q[k][j] = 0;
                 }
             }
         }
@@ -256,8 +266,8 @@ namespace numpy
             {
                 for (int j = 0; j < n; j++)
                 {
-                    Q(i, j) = 0;
-                    R(i, j) = 0;
+                    Q[i][j] = 0;
+                    R[i][j] = 0;
                 }
             }
             // Phân rã QR theo Gram–Schmidt
@@ -266,19 +276,19 @@ namespace numpy
                 std::vector<data_type> v(n);
                 for (int i = 0; i < n; i++)
                 {
-                    v[i] = A(i, j);
+                    v[i] = A[i][j];
                 }
                 for (int i = 0; i < j; i++)
                 {
                     data_type dot = 0;
                     for (int k = 0; k < n; k++)
                     {
-                        dot += Q(k, i) * A(k, j);
+                        dot += Q[k][i] * A[k][j];
                     }
                     R(i, j) = dot;
                     for (int k = 0; k < n; k++)
                     {
-                        v[k] -= dot * Q(k, i);
+                        v[k] -= dot * Q[k][i];
                     }
                 }
                 data_type norm_v = 0;
@@ -292,14 +302,14 @@ namespace numpy
                 {
                     for (int k = 0; k < n; k++)
                     {
-                        Q(k, j) = v[k] / norm_v;
+                        Q[k][j] = v[k] / norm_v;
                     }
                 }
                 else
                 {
                     for (int k = 0; k < n; k++)
                     {
-                        Q(k, j) = 0;
+                        Q[k][j] = 0;
                     }
                 }
             }
@@ -309,10 +319,10 @@ namespace numpy
             {
                 for (int j = 0; j < n; j++)
                 {
-                    A_next(i, j) = 0;
+                    A_next[i][j] = 0;
                     for (int k = 0; k < n; k++)
                     {
-                        A_next(i, j) += R(i, k) * Q(k, j);
+                        A_next[i][j] += R[i][k] * Q[k][j];
                     }
                 }
             }
@@ -324,7 +334,7 @@ namespace numpy
                 {
                     if (i != j)
                     {
-                        off_diag_norm += std::abs(A_next(i, j));
+                        off_diag_norm += std::abs(A_next[i][j]);
                     }
                 }
             }
@@ -338,7 +348,7 @@ namespace numpy
         ndarray<data_type> eig(n, 1);
         for (int i = 0; i < n; i++)
         {
-            eig(i, 0) = A(i, i);
+            eig[i][0] = A[i][i];
         }
         return eig;
     }
@@ -358,7 +368,7 @@ namespace numpy
         {
             for (int j = 0; j < n; j++)
             {
-                Q_total(i, j) = (i == j) ? 1 : 0;
+                Q_total[i][j] = (i == j) ? 1 : 0;
             }
         }
         const int max_iter = 1000;
@@ -373,8 +383,8 @@ namespace numpy
             {
                 for (int j = 0; j < n; j++)
                 {
-                    Q(i, j) = 0;
-                    R(i, j) = 0;
+                    Q[i][j] = 0;
+                    R[i][j] = 0;
                 }
             }
             // Phân rã QR theo Gram–Schmidt
@@ -383,19 +393,19 @@ namespace numpy
                 std::vector<data_type> v(n);
                 for (int i = 0; i < n; i++)
                 {
-                    v[i] = A(i, j);
+                    v[i] = A[i][j];
                 }
                 for (int i = 0; i < j; i++)
                 {
                     data_type dot = 0;
                     for (int k = 0; k < n; k++)
                     {
-                        dot += Q(k, i) * A(k, j);
+                        dot += Q[k][i] * A[k][j];
                     }
-                    R(i, j) = dot;
+                    R[i][j] = dot;
                     for (int k = 0; k < n; k++)
                     {
-                        v[k] -= dot * Q(k, i);
+                        v[k] -= dot * Q[k][i];
                     }
                 }
                 data_type norm_v = 0;
@@ -409,14 +419,14 @@ namespace numpy
                 {
                     for (int k = 0; k < n; k++)
                     {
-                        Q(k, j) = v[k] / norm_v;
+                        Q[k][j] = v[k] / norm_v;
                     }
                 }
                 else
                 {
                     for (int k = 0; k < n; k++)
                     {
-                        Q(k, j) = 0;
+                        Q[k][j] = 0;
                     }
                 }
             }
@@ -426,10 +436,10 @@ namespace numpy
             {
                 for (int j = 0; j < n; j++)
                 {
-                    A_next(i, j) = 0;
+                    A_next[i][j] = 0;
                     for (int k = 0; k < n; k++)
                     {
-                        A_next(i, j) += R(i, k) * Q(k, j);
+                        A_next[i][j] += R[i][k] * Q[k][j];
                     }
                 }
             }
@@ -440,10 +450,10 @@ namespace numpy
             {
                 for (int j = 0; j < n; j++)
                 {
-                    newQ_total(i, j) = 0;
+                    newQ_total[i][j] = 0;
                     for (int k = 0; k < n; k++)
                     {
-                        newQ_total(i, j) += Q_total(i, k) * Q(k, j);
+                        newQ_total[i][j] += Q_total[i][k] * Q[k][j];
                     }
                 }
             }
@@ -456,7 +466,7 @@ namespace numpy
                 {
                     if (i != j)
                     {
-                        off_diag_norm += std::abs(A(i, j));
+                        off_diag_norm += std::abs(A[i][j]);
                     }
                 }
             }
@@ -497,12 +507,12 @@ namespace numpy
         {
             for (int j = 0; j < n; j++)
             {
-                S_mat(i, j) = 0;
+                S_mat[i][j] = 0;
             }
         }
         for (int i = 0; i < n; i++)
         {
-            S_mat(i, i) = std::sqrt(eigen_vals(i, 0));
+            S_mat[i][i] = std::sqrt(eigen_vals(i, 0));
         }
 
         // Gán V = eigen_vecs (theo giả định các vector riêng được lưu theo cột)
@@ -515,12 +525,12 @@ namespace numpy
         {
             for (int j = 0; j < n; j++)
             {
-                U(i, j) = 0;
+                U[i][j] = 0;
             }
         }
         for (int i = 0; i < n; i++)
         {
-            data_type sigma = S_mat(i, i);
+            data_type sigma = S_mat[i][i];
             if (sigma > 1e-6)
             {
                 for (int r = 0; r < m; r++)
@@ -528,9 +538,9 @@ namespace numpy
                     data_type sum = 0;
                     for (int k = 0; k < n; k++)
                     {
-                        sum += A(r, k) * V(k, i);
+                        sum += A[r][k] * V[k][i];
                     }
-                    U(r, i) = sum / sigma;
+                    U[r][i] = sum / sigma;
                 }
             }
             else
@@ -538,7 +548,7 @@ namespace numpy
                 // Nếu singular value quá nhỏ, gán vector U cột i bằng 0
                 for (int r = 0; r < m; r++)
                 {
-                    U(r, i) = 0;
+                    U[r][i] = 0;
                 }
             }
         }

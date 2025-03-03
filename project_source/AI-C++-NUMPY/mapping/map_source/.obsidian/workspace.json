@@ -8,7 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "329679da82f649cc",
+            "id": "0852dd2122ba0d31",
             "type": "leaf",
             "state": {
               "type": "graph",
@@ -50,7 +50,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#include",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -163,13 +163,16 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "329679da82f649cc",
+  "active": "0852dd2122ba0d31",
   "lastOpenFiles": [
     "numpy.hpp.md",
-    "specs_algo.hpp.md",
-    "specs_algo.cpp.md",
+    "2025-03-02.md",
+    "Untitled.canvas",
     "numpy.cpp.md",
-    "linear_regression.cpp.md",
+    "linear_regression.hpp.md",
+    "specs_algo.hpp.md",
+    "test.cpp.md",
+    "specs_algo.cpp.md",
     "Untitled",
     "run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source/AI-C++-NUMPY/algo/numpy.cpp.md",
     "run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source/AI-C++-NUMPY/algo",

@@ -211,7 +211,7 @@ namespace numpy
 
 this file will include all header file and overload operator function
 will include more header type of function application, and this file will be include into file
-[[numpy.cpp]], [[specs_algo.hpp]], [[specs_algo.cpp]], [[linear_regression.cpp]]
+[[numpy.cpp]], [[specs_algo.hpp]], [[specs_algo.cpp]], [[linear_regression.hpp]], [[test.cpp]]
 
 structure:
 and define set block for protected function:

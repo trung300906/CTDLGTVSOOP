@@ -125,10 +125,11 @@ tuple_matrix gradient_descent(numpy::ndarray &X, numpy::ndarray &y, numpy::ndarr
         numpy::ndarray predictions = predict_function(X, theta);
         theta = theta - (X.transpose() * (predictions - y)) * (learning_rate / m);
         // private field
-        cost_history.data[i][0] = compute_cost_vector(X, y, theta);
-        theta_history.data[i] = theta;
+        /*cost_history[i][0] = compute_cost_vector(X, y, theta);
+        theta_history[i] = theta;
+        */
     }
-    return tuple_matrix{theta, cost_history, theta_history};
+    return theta;
 }
 #endif
 #endif
