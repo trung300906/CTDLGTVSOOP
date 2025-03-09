@@ -1,1 +1,0 @@
-clear && cd "/run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source/AI-C++-NUMPY/" && g++ test.cxx ./algo/algo_based.cxx ./algo/operator.cxx -o test && "/run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source/AI-C++-NUMPY/"test
