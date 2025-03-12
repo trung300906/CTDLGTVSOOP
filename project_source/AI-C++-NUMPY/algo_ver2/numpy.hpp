@@ -3,7 +3,9 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include <functional>
 #include <initializer_list>
+#include <string>
 
 /*
     all things will store in 1D array, and because for that, it will be easy and  effecient for memory
@@ -50,47 +52,47 @@ namespace numpy
             size_t idx = 0;
             for (size_t i = 0; i < indices.size(); i++)
             {
-                assert(indices[i] < shape[i]);
+                assert(indices[i] <= shape[i]);
                 idx += indices[i] * strides[i];
             }
             return idx;
         }
 
-        data_type &operator()(const std::initializer_list<size_t> &indices)
+        data_type &operator()(const std::vector<size_t> &indices)
         {
             return data[Index(indices)];
         }
-        const data_type &operator()(const std::initializer_list<size_t> &indices) const
+        const data_type &operator()(const std::vector<size_t> &indices) const
         {
             return data[Index(indices)];
         }
+        friend std::ostream &operator<<(std::ostream &out, ndarray<data_type> &nd)
+        {
+            std::function<void(std::vector<size_t> &, std::vector<size_t> &, size_t, size_t)> recursive;
+            recursive = [&](std::vector<size_t> &index, std::vector<size_t> &path, size_t level = 0, size_t indent = 0)
+            {
+                if (level == index.size())
+                {
+                    out << std::string(indent, ' ') << "[";
+                    out << nd(path);
+                    out << "]\n";
+                    return;
+                }
+                out << std::string(indent, ' ') << "[\n";
+                for (size_t i = 0; i < index[level]; i++)
+                {
+                    path[level] = i;
+                    recursive(index, path, level + 1, indent + 2);
+                }
+                out << std::string(indent, ' ') << "]\n";
+            };
+            std::vector<size_t> path(nd.shape.size(), 0);
+            recursive(nd.shape, path, 0, 0);
+            return out;
+        }
+        friend std::istream &operator>>(std::istream &input, ndarray<data_type> &nd)
     };
     // Hàm đệ quy để in mảng n chiều
-    template <typename data_type>
-    void print_recursive(std::ostream &out, const ndarray<data_type>& nd, std::vector<size_t>& indices, size_t dim) {
-        if (dim == nd.shape.size()) {
-            // Khi đã có chỉ số cho tất cả các chiều, in giá trị tại vị trí đó
-            out << nd({indices.begin(), indices.end()});
-            return;
-        }
-        
-        out << "[";
-        for (size_t i = 0; i < nd.shape[dim]; i++) {
-            indices.push_back(i);
-            print_recursive(out, nd, indices, dim + 1);
-            indices.pop_back();
-            if (i != nd.shape[dim] - 1)
-                out << ", ";
-        }
-        out << "]";
-    }
 
-    // Overload operator<< cho ndarray
-    template <typename data_type>
-    std::ostream& operator<<(std::ostream &out, const ndarray<data_type>& nd) {
-        std::vector<size_t> indices;
-        print_recursive(out, nd, indices, 0);
-        return out;
-    }
 }
 #endif
