@@ -6,6 +6,9 @@
 #include <functional>
 #include <initializer_list>
 #include <string>
+#include <immintrin.h> // AVX2
+#include <algorithm>
+#include <execution>
 
 /*
     all things will store in 1D array, and because for that, it will be easy and  effecient for memory
@@ -19,8 +22,6 @@
     so, if you want to get value at (i, j, k), you just need to calculate index = i * stride[0] + j * stride[1] + k * stride[2]
     and if you want to get value at (i, j), you just need to calculate index = i * stride[0] + j * stride[1]
     and if you want to get value at (i), you just need to calculate index = i * stride[0]
-
-
 */
 namespace numpy
 {
@@ -58,6 +59,7 @@ namespace numpy
             return idx;
         }
 
+        // operator function
         data_type &operator()(const std::vector<size_t> &indices)
         {
             return data[Index(indices)];
@@ -68,6 +70,7 @@ namespace numpy
         }
         friend std::ostream &operator<<(std::ostream &out, ndarray<data_type> &nd)
         {
+            // Hàm đệ quy để in mảng n chiều
             std::function<void(std::vector<size_t> &, std::vector<size_t> &, size_t, size_t)> recursive;
             recursive = [&](std::vector<size_t> &index, std::vector<size_t> &path, size_t level = 0, size_t indent = 0)
             {
@@ -91,8 +94,98 @@ namespace numpy
             return out;
         }
         friend std::istream &operator>>(std::istream &input, ndarray<data_type> &nd)
-    };
-    // Hàm đệ quy để in mảng n chiều
+        {
+            std::function<void(std::vector<size_t> &, std::vector<size_t> &, size_t)> recursive;
+            recursive = [&](std::vector<size_t> &index, std::vector<size_t> &path, size_t level = 0)
+            {
+                if (level == index.size())
+                {
+                    std::cout << "[";
+                    for (auto &elem : path)
+                        std::cout << elem + 1 << " ";
+                    std::cout << "]: ";
+                    input >> nd(path);
+                    std::cout << "\n";
+                    return;
+                }
+                for (size_t i = 0; i < index[level]; i++)
+                {
+                    path[level] = i;
+                    recursive(index, path, level + 1);
+                }
+            };
+            std::vector<size_t> path(nd.shape.size(), 0);
+            recursive(nd.shape, path, 0);
+            return input;
+        }
+        ndarray<data_type> operator=(const ndarray<data_type> &nd)
+        {
+            shape = nd.shape;
+            strides = nd.strides;
+            data = nd.data;
+            return *this;
+        }
 
+        // need fix
+        ndarray<data_type> operator+(const ndarray<data_type> &nd)
+        {
+            assert(nd.data.size() == data.size());
+            assert(nd.shape == shape);
+            assert(nd.strides == strides);
+            ndarray<data_type> answer({shape});
+            std::function<void(const data_type *A, const data_type *B, data_type *C, size_t n)> simd_add;
+            simd_add = [&](const data_type *A, const data_type *B, data_type *C, size_t n)
+            {
+                size_t i = 0;
+                for (; i + 8 <= n; i += 8) // Xử lý 8 phần tử cùng lúc
+                {
+                    __m256i a = _mm256_loadu_si256((__m256i *)&A[i]);
+                    __m256i b = _mm256_loadu_si256((__m256i *)&B[i]);
+                    __m256i c = _mm256_add_epi32(a, b);
+                    _mm256_storeu_si256((__m256i *)&C[i], c);
+                }
+
+                // Xử lý phần dư (nếu không chia hết cho 8)
+                for (; i < n; i++)
+                    C[i] = A[i] + B[i];
+            };
+            simd_add(data.data(), nd.data.data(), answer.data.data(), data.size());
+            return answer;
+        }
+        ndarray<data_type> operator-(const ndarray<data_type> &nd)
+        {
+            assert(nd.data.size() == data.size());
+            assert(nd.shape == shape);
+            assert(nd.strides == strides);
+            ndarray<data_type> answer({shape});
+            std::function<void(const data_type *A, const data_type *B, data_type *C, size_t n)> simd_add;
+            simd_add = [&](const data_type *A, const data_type *B, data_type *C, size_t n)
+            {
+                size_t i = 0;
+                for (; i + 8 <= n; i += 8) // Xử lý 8 phần tử cùng lúc
+                {
+                    __m256i a = _mm256_loadu_si256((__m256i *)&A[i]);
+                    __m256i b = _mm256_loadu_si256((__m256i *)&B[i]);
+                    __m256i c = _mm256_sub_epi32(a, b);
+                    _mm256_storeu_si256((__m256i *)&C[i], c);
+                }
+
+                // Xử lý phần dư (nếu không chia hết cho 8)
+                for (; i < n; i++)
+                    C[i] = A[i] - B[i];
+            };
+            simd_add(data.data(), nd.data.data(), answer.data.data(), data.size());
+            return answer;
+        }
+#if 0
+        ndarray<data_type> operator*(const data_type &scalor)
+        {
+            
+        }
+        ndarray<data_type> operator/(const ndarray<data_type> &scalor)
+        {
+        }
+#endif
+    };
 }
 #endif
