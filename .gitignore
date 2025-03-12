@@ -1,0 +1,31 @@
+# Ignore binary files
+*.o
+*.so
+*.a
+*.dll
+*.exe
+*.out
+*.bin
+*.elf
+*.img
+*.iso
+
+
+# Object files
+*.o
+*.obj
+*.lo
+*.la
+
+# Executables
+*.exe
+*.out
+*.app
+*.dSYM/
+
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

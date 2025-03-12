@@ -3,7 +3,7 @@
   "editor.tabSize": 4,
   "editor.formatOnSave": true,
   "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 1000,
+  "files.autoSaveDelay": 10000,
   "terminal.integrated.fontSize": 14,
   "C_Cpp.intelliSenseEngine": "Tag Parser",
   "C_Cpp.default.includePath": [
