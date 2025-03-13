@@ -41,6 +41,7 @@ void simd_add(const data_type *A, const data_type *B, const data_type *C, size_t
         C[i] = A[i] + B[i];
     }
 }
+
 template <typename data_type>
 void simd_sub(const data_type *A, const data_type *B, const data_type *C, size_t n)
 {
