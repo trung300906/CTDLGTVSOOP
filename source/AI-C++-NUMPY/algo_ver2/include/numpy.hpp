@@ -1,14 +1,6 @@
 #ifndef NUMPY_HPP
 #define NUMPY_HPP
-#include <iostream>
-#include <vector>
-#include <cassert>
-#include <functional>
-#include <initializer_list>
-#include <string>
-#include <immintrin.h> // AVX2
-#include <algorithm>
-#include <execution>
+#include "header.hpp"
 
 /*
     all things will store in 1D array, and because for that, it will be easy and  effecient for memory

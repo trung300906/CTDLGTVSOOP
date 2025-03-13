@@ -1,14 +1,6 @@
 #ifndef SIMD_HPP
 #define SIMD_HPP
-#include <iostream>
-#include <vector>
-#include <cassert>
-#include <functional>
-#include <initializer_list>
-#include <string>
-#include <immintrin.h> // AVX2
-#include <algorithm>
-#include <execution>
+#include "header.hpp"
 
 template <typename data_type>
 void simd_add(const data_type *A, const data_type *B, const data_type *C, size_t n)

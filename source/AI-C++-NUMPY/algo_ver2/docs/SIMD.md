@@ -10,24 +10,45 @@ and:
 
 ### linux platform:
 
-```bash
+``` bash
 grep -m1 'flags' /proc/cpuinfo | grep -o 'avx[^ ]*'
-```
+````
 
 or:
 
-```bash
+``` bash
 lscpu | grep -i avx
 ```
 
+
+for the first command, it should be reported like:
+``` bash
+grep -m1 'flags' /proc/cpuinfo | grep -o 'avx[^ ]*'
+avx  
+avx2  
+avx512f  
+avx512dq  
+avx512ifma  
+avx512cd  
+avx512bw  
+avx512vl  
+avx512vbmi  
+avx512_vbmi2  
+avx512_vnni  
+avx512_bitalg  
+avx512_vpopcntdq  
+avx512_vp2intersect
+````
+
+
 ### windows platform:
 
-```shell-bash
+``` shell
 wmic cpu get Caption, DeviceID, Manufacturer, Name, NumberOfCores, MaxClockSpeed, Description
 ```
 
 ### Macos platform
 
-```bash
+``` bash
 sysctl -a | grep machdep.cpu
 ```
