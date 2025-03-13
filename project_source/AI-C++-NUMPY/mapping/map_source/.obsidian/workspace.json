@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "9ff33b6d40fcf8c7",
+        "id": "bd0c0421b1473885",
         "type": "tabs",
         "children": [
           {
-            "id": "0852dd2122ba0d31",
+            "id": "e3a10f1eea20a24e",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "Untitled.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Untitled"
             }
           }
         ],
@@ -163,8 +167,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0852dd2122ba0d31",
+  "active": "e3a10f1eea20a24e",
   "lastOpenFiles": [
+    "Untitled.md",
     "numpy.hpp.md",
     "2025-03-02.md",
     "Untitled.canvas",
