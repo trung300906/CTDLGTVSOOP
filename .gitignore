@@ -10,7 +10,6 @@
 *.img
 *.iso
 
-
 # Object files
 *.o
 *.obj
@@ -22,7 +21,7 @@
 *.out
 *.app
 *.dSYM/
-
+*.run
 
 # Python cache
 __pycache__/

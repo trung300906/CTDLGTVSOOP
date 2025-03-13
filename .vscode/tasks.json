@@ -9,7 +9,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}.run"
             ],
             "group": "build",
             "problemMatcher": [
@@ -25,7 +25,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}.run"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -68,7 +68,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}.run"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -87,7 +87,7 @@
               "-g",
               "${file}",
               "-o",
-              "${fileDirname}/${fileBasenameNoExtension}"
+              "${fileDirname}/${fileBasenameNoExtension}.run"
             ],
             "group": {
               "kind": "build",
