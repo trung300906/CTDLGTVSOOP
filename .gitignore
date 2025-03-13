@@ -30,3 +30,5 @@ __pycache__/
 *.pyo
 *.pyd
 
+#obsidian
+.obsidian
