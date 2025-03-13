@@ -8,11 +8,12 @@
 *.bin
 *.elf
 *.img
+*.run
 *.iso
 
 # Object files
 *.o
-*.obj
+*.obj       
 *.lo
 *.la
 
