@@ -126,6 +126,7 @@ namespace numpy
             return *this;
         }
 
+#if 0
         // need fix
         ndarray<data_type> operator+(const ndarray<data_type> &nd)
         {
@@ -171,19 +172,25 @@ namespace numpy
                 }
 
                 // Xử lý phần dư (nếu không chia hết cho 8)
+#pragma omp simd
                 for (; i < n; i++)
                     C[i] = A[i] - B[i];
             };
             simd_add(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
-#if 0
+
         ndarray<data_type> operator*(const data_type &scalor)
         {
-            
+            for(auto &i: data){
+                i*=scalor;
+            }
         }
         ndarray<data_type> operator/(const ndarray<data_type> &scalor)
         {
+            for(auto &i: data){
+                i/=scalor;  
+            }
         }
 #endif
     };
