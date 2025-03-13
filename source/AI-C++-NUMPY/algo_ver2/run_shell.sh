@@ -1,1 +1,1 @@
-cd /run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source/AI-C++-NUMPY/algo_ver2 && g++ -mavx2 -O3 -march=native -ffast-math test.cxx -o test.run -ltbb && /run/media/trung/hdddrive/CODE/CTDLGTVSOOP/project_source/AI-C++-NUMPY/algo_ver2/test.run
+cd /run/media/trung/hdddrive/CODE/CTDLGTVSOOP/source/AI-C++-NUMPY/algo_ver2 && g++ -mavx2 -O3 -march=native -ffast-math test.cxx -o test.run -ltbb && /run/media/trung/hdddrive/CODE/CTDLGTVSOOP/source/AI-C++-NUMPY/algo_ver2/test.run
