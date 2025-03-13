@@ -6,7 +6,7 @@ check compatible using avx:
 linux platform:
 
 ```bash
-grep -m1 'flags' /proc/cpuinfo | grep -o 'avx[^ ]\*'
+grep -m1 'flags' /proc/cpuinfo | grep -o 'avx[^ ]*'
 ```
 
 or:
