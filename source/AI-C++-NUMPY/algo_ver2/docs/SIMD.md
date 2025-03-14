@@ -1,10 +1,6 @@
 # this is module for using SIMD for parallelism multiple data(used AVX)
 
-for more please follow:
-
-[SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data)
-and:
-[AVX](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions)
+for more please follow: [SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data) and: [AVX](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions)
 
 ## check compatible using avx:
 

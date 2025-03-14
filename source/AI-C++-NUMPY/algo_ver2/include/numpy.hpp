@@ -1,6 +1,7 @@
 #ifndef NUMPY_HPP
 #define NUMPY_HPP
 #include "header.hpp"
+#include "SIMD.hpp"
 
 /*
     all things will store in 1D array, and because for that, it will be easy and  effecient for memory
@@ -118,30 +119,13 @@ namespace numpy
             return *this;
         }
 
-#if 0
         // need fix
         ndarray<data_type> operator+(const ndarray<data_type> &nd)
         {
             assert(nd.data.size() == data.size());
             assert(nd.shape == shape);
             assert(nd.strides == strides);
-            ndarray<data_type> answer({shape});
-            std::function<void(const data_type *A, const data_type *B, data_type *C, size_t n)> simd_add;
-            simd_add = [&](const data_type *A, const data_type *B, data_type *C, size_t n)
-            {
-                size_t i = 0;
-                for (; i + 8 <= n; i += 8) // Xử lý 8 phần tử cùng lúc
-                {
-                    __m256i a = _mm256_loadu_si256((__m256i *)&A[i]);
-                    __m256i b = _mm256_loadu_si256((__m256i *)&B[i]);
-                    __m256i c = _mm256_add_epi32(a, b);
-                    _mm256_storeu_si256((__m256i *)&C[i], c);
-                }
-
-                // Xử lý phần dư (nếu không chia hết cho 8)
-                for (; i < n; i++)
-                    C[i] = A[i] + B[i];
-            };
+            ndarray<data_type> answer({shape}); // make index and shape like raw data
             simd_add(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
@@ -151,40 +135,24 @@ namespace numpy
             assert(nd.shape == shape);
             assert(nd.strides == strides);
             ndarray<data_type> answer({shape});
-            std::function<void(const data_type *A, const data_type *B, data_type *C, size_t n)> simd_add;
-            simd_add = [&](const data_type *A, const data_type *B, data_type *C, size_t n)
-            {
-                size_t i = 0;
-                for (; i + 8 <= n; i += 8) // Xử lý 8 phần tử cùng lúc
-                {
-                    __m256i a = _mm256_loadu_si256((__m256i *)&A[i]);
-                    __m256i b = _mm256_loadu_si256((__m256i *)&B[i]);
-                    __m256i c = _mm256_sub_epi32(a, b);
-                    _mm256_storeu_si256((__m256i *)&C[i], c);
-                }
-
-                // Xử lý phần dư (nếu không chia hết cho 8)
-#pragma omp simd
-                for (; i < n; i++)
-                    C[i] = A[i] - B[i];
-            };
-            simd_add(data.data(), nd.data.data(), answer.data.data(), data.size());
+            simd_sub(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
 
         ndarray<data_type> operator*(const data_type &scalor)
         {
-            for(auto &i: data){
-                i*=scalor;
+            for (auto &i : data)
+            {
+                i *= scalor;
             }
         }
         ndarray<data_type> operator/(const ndarray<data_type> &scalor)
         {
-            for(auto &i: data){
-                i/=scalor;  
+            for (auto &i : data)
+            {
+                i /= scalor;
             }
         }
-#endif
     };
 }
 #endif
