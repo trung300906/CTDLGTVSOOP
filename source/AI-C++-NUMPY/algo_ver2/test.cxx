@@ -5,6 +5,6 @@ int main()
     std::cin >> A;
     numpy::ndarray<double> B({3, 3});
     std::cin >> B;
-    numpy::ndarray<double> C = A - B;
-    std::cout << C.shape;
+    numpy::ndarray<double> C = A * 2;
+    std::cout << C;
 }

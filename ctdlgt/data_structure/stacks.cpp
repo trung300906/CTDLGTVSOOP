@@ -3,10 +3,10 @@ using namespace std;
 
 int main()
 {
-    stack<string> cars;
-    cars.push("volvo");
-    cars.push("lamborghini");
-    cars.push("hoyota");
+    stack<int> cars;
+    cars.push(5);
+    cars.push(3);
+    cars.push(10);
     while (!cars.empty())
     {
         cout << cars.top() << " ";

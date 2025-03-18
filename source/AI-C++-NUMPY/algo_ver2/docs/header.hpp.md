@@ -1,5 +1,5 @@
-``` cpp
 
+``` cpp
 #ifndef HEADER_HPP
 
 #define HEADER_HPP
@@ -62,6 +62,10 @@
 
 #include <smmintrin.h> // SSE4
 
+#include <type_traits>
+
+#include <cstddef>
+
   
 
 // MATH
@@ -76,6 +80,11 @@
 
   
 
-#endif
+// another header
 
-````
+#include "SIMD.hpp"
+
+#endif
+```
+
+[[SIMD.hpp]], [[numpy.hpp]]

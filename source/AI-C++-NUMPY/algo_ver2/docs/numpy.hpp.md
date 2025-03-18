@@ -1,7 +1,9 @@
+```cpp
+
 #ifndef NUMPY_HPP
 #define NUMPY_HPP
 #include "header.hpp"
-#include "SIMD.hpp"
+
 /*
     all things will store in 1D array, and because for that, it will be easy and  effecient for memory
     about index:
@@ -50,6 +52,9 @@ namespace numpy
             }
             return idx;
         }
+
+        std::vector<size_t> shape();
+
         // operator function
         data_type &operator()(const std::vector<size_t> &indices)
         {
@@ -136,23 +141,26 @@ namespace numpy
             simd_sub(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
+
         ndarray<data_type> operator*(const data_type &scalor)
         {
             assert(shape.empty());
             assert(strides.empty());
-            ndarray<data_type> answer(*this);
-            simd_elem_mul(answer.data.data(), answer.data.size(), scalor);
-            return answer;
+            simd_elem_mul(data.data(), data.size(), scalor);
+            return *this;
         }
+
         ndarray<data_type> operator/(const ndarray<data_type> &scalor)
         {
-            assert(shape.empty());
-            assert(strides.empty());
             assert(scalor == 0);
-            ndarray<data_type> answer(*this);
-            simd_elem_div(answer.data.data(), answer.data.size(), scalor);
+            for (auto &i : data)
+            {
+                i /= scalor;
+            }
             return *this;
         }
     };
 }
 #endif
+
+```
