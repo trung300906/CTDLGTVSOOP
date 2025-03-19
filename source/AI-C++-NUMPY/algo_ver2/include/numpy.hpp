@@ -59,11 +59,11 @@ namespace numpy
         {
             return data[Index(indices)];
         }
-        friend std::ostream &operator<<(std::ostream &out, ndarray<data_type> &nd)
+        friend std::ostream &operator<<(std::ostream &out, const ndarray<data_type> &nd)
         {
             // Hàm đệ quy để in mảng n chiều
-            std::function<void(std::vector<size_t> &, std::vector<size_t> &, size_t, size_t)> recursive;
-            recursive = [&](std::vector<size_t> &index, std::vector<size_t> &path, size_t level = 0, size_t indent = 0)
+            std::function<void(const std::vector<size_t> &, std::vector<size_t> &, size_t, size_t)> recursive;
+            recursive = [&](const std::vector<size_t> &index, std::vector<size_t> &path, size_t level = 0, size_t indent = 0)
             {
                 if (level == index.size())
                 {
@@ -138,21 +138,26 @@ namespace numpy
         }
         ndarray<data_type> operator*(const data_type &scalor)
         {
-            assert(shape.empty());
-            assert(strides.empty());
+            assert(!shape.empty());
+            assert(!strides.empty());
             ndarray<data_type> answer(*this);
             simd_elem_mul(answer.data.data(), answer.data.size(), scalor);
             return answer;
         }
-        ndarray<data_type> operator/(const ndarray<data_type> &scalor)
+        ndarray<data_type> operator/(const data_type &scalor)
         {
-            assert(shape.empty());
-            assert(strides.empty());
-            assert(scalor == 0);
+            assert(!shape.empty());
+            assert(!strides.empty());
+            assert(scalor != 0);
             ndarray<data_type> answer(*this);
             simd_elem_div(answer.data.data(), answer.data.size(), scalor);
-            return *this;
+            return answer;
         }
+#if 0
+        ndarray<data_type> operator^(const data_type &scalor){
+            
+        }
+#endif
     };
 }
 #endif
