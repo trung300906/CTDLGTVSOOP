@@ -1,6 +1,114 @@
 #include "simd_index.hpp"
 
 template <typename data_type>
+void simd_elem_add(data_type *A, size_t shape, const data_type &scalor)
+{
+    size_t i = 0;
+    if constexpr (std::is_same_v<data_type, float>)
+    {
+        __m512 scalar_vec = _mm512_set1_ps(scalor); // Broadcast scalar to all elements of the vector
+        for (; i + 16 <= shape; i += 16)
+        {
+            __m512 a = _mm512_loadu_ps(&A[i]); // Load 16 floats from memory
+            a = _mm512_add_ps(a, scalar_vec);  // Perform element-wise addition
+            _mm512_storeu_ps(&A[i], a);        // Store the result back to memory
+        }
+    }
+    else if constexpr (std::is_same_v<data_type, double>)
+    {
+        __m512d scalar_vec = _mm512_set1_pd(scalor); // Broadcast scalar to all elements of the vector
+        for (; i + 8 <= shape; i += 8)
+        {
+            __m512d a = _mm512_loadu_pd(&A[i]); // Load 8 doubles from memory
+            a = _mm512_add_pd(a, scalar_vec);   // Perform element-wise addition
+            _mm512_storeu_pd(&A[i], a);         // Store the result back to memory
+        }
+    }
+    else if constexpr (std::is_integral_v<data_type>)
+    {
+        if constexpr (sizeof(data_type) == 4) // 32-bit integers
+        {
+            __m512i scalar_vec = _mm512_set1_epi32(scalor); // Broadcast scalar to all elements of the vector
+            for (; i + 16 <= shape; i += 16)
+            {
+                __m512i a = _mm512_loadu_si512(reinterpret_cast<const __m512i *>(&A[i])); // Load 16 integers
+                a = _mm512_add_epi32(a, scalar_vec);                                      // Perform element-wise addition
+                _mm512_storeu_si512(reinterpret_cast<__m512i *>(&A[i]), a);               // Store the result back to memory
+            }
+        }
+        else if constexpr (sizeof(data_type) == 8) // 64-bit integers
+        {
+            __m512i scalar_vec = _mm512_set1_epi64(scalor); // Broadcast scalar to all elements of the vector
+            for (; i + 8 <= shape; i += 8)
+            {
+                __m512i a = _mm512_loadu_si512(reinterpret_cast<const __m512i *>(&A[i])); // Load 8 integers
+                a = _mm512_add_epi64(a, scalar_vec);                                      // Perform element-wise addition
+                _mm512_storeu_si512(reinterpret_cast<__m512i *>(&A[i]), a);               // Store the result back to memory
+            }
+        }
+    }
+    // Process remaining elements
+    for (; i < shape; i++)
+    {
+        A[i] += scalor;
+    }
+}
+
+template <typename data_type>
+void simd_elem_sub(data_type *A, size_t shape, const data_type &scalor)
+{
+    size_t i = 0;
+    if constexpr (std::is_same_v<data_type, float>)
+    {
+        __m512 scalar_vec = _mm512_set1_ps(scalor);
+        for (; i + 16 <= shape; i += 16)
+        {
+            __m512 a = _mm512_loadu_ps(&A[i]);
+            a = _mm512_sub_ps(a, scalar_vec);
+            _mm512_storeu_ps(&A[i], a);
+        }
+    }
+    else if constexpr (std::is_same_v<data_type, double>)
+    {
+        __m512d scalar_vec = _mm512_set1_pd(scalor);
+        for (; i + 8 <= shape; i += 8)
+        {
+            __m512d a = _mm512_loadu_pd(&A[i]);
+            a = _mm512_sub_pd(a, scalar_vec);
+            _mm512_storeu_pd(&A[i], a);
+        }
+    }
+    else if constexpr (std::is_integral_v<data_type>)
+    {
+        if constexpr (sizeof(data_type) == 4) // 32-bit integers
+        {
+            __m512i scalar_vec = _mm512_set1_epi32(scalor);
+            for (; i + 16 <= shape; i += 16)
+            {
+                __m512i a = _mm512_loadu_si512(reinterpret_cast<const __m512i *>(&A[i]));
+                a = _mm512_sub_epi32(a, scalar_vec);
+                _mm512_storeu_si512(reinterpret_cast<__m512i *>(&A[i]), a);
+            }
+        }
+        else if constexpr (sizeof(data_type) == 8) // 64-bit integers
+        {
+            __m512i scalar_vec = _mm512_set1_epi64(scalor);
+            for (; i + 8 <= shape; i += 8)
+            {
+                __m512i a = _mm512_loadu_si512(reinterpret_cast<const __m512i *>(&A[i]));
+                a = _mm512_sub_epi64(a, scalar_vec);
+                _mm512_storeu_si512(reinterpret_cast<__m512i *>(&A[i]), a);
+            }
+        }
+    }
+    // Process remaining elements
+    for (; i < shape; i++)
+    {
+        A[i] -= scalor;
+    }
+}
+
+template <typename data_type>
 void simd_elem_mul(data_type *A, size_t shape, const data_type &scalor)
 {
     size_t i = 0;

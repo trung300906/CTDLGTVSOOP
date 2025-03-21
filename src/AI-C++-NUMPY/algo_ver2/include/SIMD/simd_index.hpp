@@ -11,6 +11,12 @@ void simd_sub(const data_type *A, const data_type *B, data_type *C, size_t shape
 
 // element-wise operations
 template <typename data_type>
+void simd_elem_add(data_type *A, size_t shape, const data_type &scalor); // element-wise addition
+
+template <typename data_type>
+void simd_elem_sub(data_type *A, size_t shape, const data_type &scalor); // element-wise subtraction
+
+template <typename data_type>
 void simd_elem_mul(data_type *A, size_t shape, const data_type &scalor); // element-wise multiplication
 
 template <typename data_type>
