@@ -10,7 +10,7 @@
                 "-Wall",
                 "-std=gnu++23",
                 "-mavx512f",
-                "-O3",
+                "-Og",
                 "-march=native",
                 "-ffast-math",
                 "${file}",

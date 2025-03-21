@@ -19,7 +19,13 @@
           "ignoreFailures": true
         }
       ],
-      "preLaunchTask": "C/C++: g++ build active file"
+      "preLaunchTask": "C/C++: g++ build active file",
+      "showDisassembly": "always", // Optional: Show disassembly for low-level debugging
+      "logging": {
+        "engineLogging": false, // Set to true for detailed debug logs
+        "trace": false,
+        "traceResponse": false
+      }
     },
     {
       "name": "C/C++ Runner: Debug Session",
@@ -28,8 +34,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/run/media/trung/hdddrive/CODE/CTDLGTVSOOP",
-      "program": "/run/media/trung/hdddrive/CODE/CTDLGTVSOOP/build/Debug/outDebug",
+      "cwd": "/run/media/trung/hdddrive/CODE/CTDLGTVSOOP/baitap source code/UIT",
+      "program": "/run/media/trung/hdddrive/CODE/CTDLGTVSOOP/baitap source code/UIT/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

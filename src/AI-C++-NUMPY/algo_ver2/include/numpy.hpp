@@ -1,7 +1,7 @@
 #ifndef NUMPY_HPP
 #define NUMPY_HPP
-#include "header.hpp"
-#include "SIMD.hpp"
+#include "based/header.hpp"
+#include "SIMD/simd_index.hpp"
 /*
     all things will store in 1D array, and because for that, it will be easy and  effecient for memory
     about index:
@@ -116,8 +116,8 @@ namespace numpy
             data = nd.data;
             return *this;
         }
-
-        // need fix
+#if 0
+        // operator add
         ndarray<data_type> operator+(const ndarray<data_type> &nd)
         {
             assert(nd.data.size() == data.size());
@@ -127,6 +127,17 @@ namespace numpy
             simd_add(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
+        // missing operator+ for scalor
+        ndarray<data_type> operator+(const data_type &scalor)
+        {
+            assert(!shape.empty());
+            assert(!strides.empty());
+            ndarray<data_type> answer(*this);
+            simd_elem_add(answer.data.data(), answer.data.size(), scalor);
+            return answer;
+        }
+
+        // operator sub
         ndarray<data_type> operator-(const ndarray<data_type> &nd)
         {
             assert(nd.data.size() == data.size());
@@ -136,12 +147,43 @@ namespace numpy
             simd_sub(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
+        // missing operator- for scalor
+        ndarray<daya_type> operator-(const data_type &scalor){
+            assert(!shape.empty());
+            assert(!strides.empty());
+            ndarray<data_type> answer(*this);
+            simd_elem_sub(answer.data.data(), answer.data.size(), scalor);
+            return answer;
+        }
+
+        // operator mul
+        // missing operator* for matrix_matrix
+        ndarray<data_type> operator*(const ndarray<data_type> &nd)
+        {
+            assert(nd.data.size() == data.size());
+            assert(nd.shape == shape);
+            assert(nd.strides == strides);
+            ndarray<data_type> answer({shape});
+            simd_mul(data.data(), nd.data.data(), answer.data.data(), data.size());
+            return answer;
+        }
         ndarray<data_type> operator*(const data_type &scalor)
         {
             assert(!shape.empty());
             assert(!strides.empty());
             ndarray<data_type> answer(*this);
             simd_elem_mul(answer.data.data(), answer.data.size(), scalor);
+            return answer;
+        }
+
+        // operator div
+        // missing operator/ for matrix_matrix
+        ndarray<data_type> operator/(const ndarray<data_type> &nd){
+            assert(nd.data.size() == data.size());
+            assert(nd.shape == shape);
+            assert(nd.strides == strides);
+            ndarray<data_type> answer({shape});
+            simd_div(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
         ndarray<data_type> operator/(const data_type &scalor)
@@ -153,9 +195,23 @@ namespace numpy
             simd_elem_div(answer.data.data(), answer.data.size(), scalor);
             return answer;
         }
-#if 0
+
+        // operator power
+        // missing operator ^ for matrix_matrix
+        ndarray<data_type> operator^(const ndarray<data_type> &nd){
+            assert(nd.data.size() == data.size());
+            assert(nd.shape == shape);
+            assert(nd.strides == strides);
+            ndarray<data_type> answer({shape});
+            simd_power(data.data(), data.size(), nd.data[0]);
+            return answer;
+        }
         ndarray<data_type> operator^(const data_type &scalor){
-            
+            assert(!shape.empty());
+            assert(!strides.empty());
+            ndarray<data_type> answer(*this);
+            simd_power(answer.data.data(), answer.data.size(), scalor);
+            return answer;
         }
 #endif
     };

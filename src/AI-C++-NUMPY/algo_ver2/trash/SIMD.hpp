@@ -3,6 +3,23 @@
 #include "header.hpp"
 
 template <typename data_type>
+void simd_add(const data_type *A, const data_type *B, data_type *C, size_t shape); // add 2 matrix
+
+template <typename data_type>
+void simd_sub(const data_type *A, const data_type *B, data_type *C, size_t shape); // sub 2 matrix
+
+template <typename data_type>
+void simd_elem_mul(data_type *A, size_t shape, const data_type &scalor); // element-wise multiplication
+
+template <typename data_type>
+void simd_elem_div(data_type *A, size_t shape, const data_type &scalor); // element-wise division
+
+#if 0 // side protector
+// template<typename data_type>
+// void simd_power(data_type *A, size_t shape, const data_type &scalor); // element-wise power
+#endif
+
+template <typename data_type>
 void simd_add(const data_type *A, const data_type *B, data_type *C, size_t shape)
 {
     size_t i = 0;
@@ -204,6 +221,7 @@ void simd_elem_div(data_type *A, size_t shape, const data_type &scalor)
     }
 }
 
+#if 0  // side protector
 template <typename data_type>
 void simd_power(data_type *A, size_t shape, const data_type &scalor)
 {
@@ -314,7 +332,6 @@ void simd_power(data_type *A, size_t shape, const data_type &scalor)
             return; // Early return to avoid the second loop
         }
     }
-
     // Process remaining elements or handle all elements for integer types
     for (; i < shape; i++)
     {
@@ -326,4 +343,6 @@ void simd_power(data_type *A, size_t shape, const data_type &scalor)
             A[i] = static_cast<data_type>(__builtin_pow(static_cast<double>(A[i]), static_cast<double>(scalor)));
     }
 }
+#endif // side protector
+
 #endif // protection header block
