@@ -1,5 +1,6 @@
-
 ``` cpp
+#pragma once
+
 #ifndef HEADER_HPP
 
 #define HEADER_HPP
@@ -80,11 +81,8 @@
 
   
 
-// another header
-
-#include "SIMD.hpp"
-
 #endif
 ```
 
-[[SIMD.hpp]], [[numpy.hpp]]
+linked into: [[simd_index.hpp]]
+[[numpy.hpp]]
