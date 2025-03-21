@@ -127,7 +127,6 @@ namespace numpy
             simd_add(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
-        // missing operator+ for scalor
         ndarray<data_type> operator+(const data_type &scalor)
         {
             assert(!shape.empty());
@@ -147,7 +146,6 @@ namespace numpy
             simd_sub(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
-        // missing operator- for scalor
         ndarray<daya_type> operator-(const data_type &scalor){
             assert(!shape.empty());
             assert(!strides.empty());
@@ -203,14 +201,14 @@ namespace numpy
             assert(nd.shape == shape);
             assert(nd.strides == strides);
             ndarray<data_type> answer({shape});
-            simd_power(data.data(), data.size(), nd.data[0]);
+            simd_power(data.data(), nd.data.data(), answer.data.data(), data.size());
             return answer;
         }
         ndarray<data_type> operator^(const data_type &scalor){
             assert(!shape.empty());
             assert(!strides.empty());
             ndarray<data_type> answer(*this);
-            simd_power(answer.data.data(), answer.data.size(), scalor);
+            simd_elem_power(answer.data.data(), answer.data.size(), scalor);
             return answer;
         }
 #endif

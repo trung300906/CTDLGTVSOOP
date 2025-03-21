@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SIMD_INDEX_HPP
 #define SIMD_INDEX_HPP
 #include "based/header.hpp"
@@ -8,6 +9,15 @@ void simd_add(const data_type *A, const data_type *B, data_type *C, size_t shape
 
 template <typename data_type>
 void simd_sub(const data_type *A, const data_type *B, data_type *C, size_t shape); // sub 2 matrix (-)
+
+template <typename data_type>
+void simd_mul(const data_type *A, const data_type *B, data_type *C, size_t shape); // multiply 2 matrix (*)
+
+template <typename data_type>
+void simd_div(const data_type *A, const data_type *B, data_type *C, size_t shape); // divide 2 matrix (/)
+
+template <typename data_type>
+void simd_power(const data_type *A, const data_type *B, data_type *C, size_t shape); // power of matrix
 
 // element-wise operations
 template <typename data_type>
@@ -23,6 +33,6 @@ template <typename data_type>
 void simd_elem_div(data_type *A, size_t shape, const data_type &scalor); // element-wise division
 
 template <typename data_type>
-void simd_power(data_type *A, size_t shape, const data_type &scalor); // element-wise power
+void simd_elem_power(data_type *A, size_t shape, const data_type &scalor); // element-wise power
 
 #endif

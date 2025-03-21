@@ -223,7 +223,7 @@ void simd_elem_div(data_type *A, size_t shape, const data_type &scalor)
 
 #if 0  // side protector
 template <typename data_type>
-void simd_power(data_type *A, size_t shape, const data_type &scalor)
+void simd_elem_power(data_type *A, size_t shape, const data_type &scalor)
 {
     size_t i = 0;
     if constexpr (std::is_same_v<data_type, float>)
